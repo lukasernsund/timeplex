@@ -12,3 +12,5 @@ To start backend:
 To start frontend:
 - cd frontend 
 - npm start
+
+Provar skriva lite mer här
