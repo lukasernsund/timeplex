@@ -12,7 +12,7 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <p>
-          Hej chrille!
+          Hej chrille, emil, simon, niklas, lukas och viktor!
         </p>
         <a
           className="App-link"
