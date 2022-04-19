@@ -1,11 +1,18 @@
 import React from 'react';
-
+import startImg from './Viktor_omslag.png'
 class Start extends React.Component {
     render(){
     return (
-        <p> Start test</p>
-    );
-    }
-}
+        <div>
+            <img src={startImg} width="1000" height="500"/>
+            <div>
+            <button className="GeneralButton"> All schedules </button>
+            <button className="GeneralButton"> New schedule </button>
+            </div>
+
+        </div>
+        );
+        }
+        }
 
 export default Start;
