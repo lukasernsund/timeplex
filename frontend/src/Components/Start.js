@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-function Start() {
+class Start extends React.Component {
+    render(){
     return (
         <p> Start test</p>
     );
+    }
 }
 
 export default Start;

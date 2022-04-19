@@ -15,6 +15,9 @@ function MainContent() {
             <Routes>
                 <Route path="/" element={<Start />}></Route>
                 <Route path="/Create" element={<Create />}></Route>
+                <Route path="/Settings" element={<Settings />}></Route>
+                <Route path="/Staff" element={<Staff />}></Route>
+                <Route path="/Schedule" element={<Schedule />}></Route>
             </Routes>
         </div>
     );
