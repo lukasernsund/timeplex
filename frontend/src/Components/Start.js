@@ -9,7 +9,7 @@ class Start extends React.Component {
         <div>
             <img src={startImg} width="1000" height="500"/>
             <div>
-            <button className="GeneralButton" onClick={handleClick}> All schedules </button>
+            <button className="GeneralButton"> All schedules </button>
             <button className="GeneralButton"> New schedule </button>
             </div>
 
