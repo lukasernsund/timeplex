@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Schedule from './Components/Schedule';
-import Staff from './Components/Staff';
-import Settings from './Components/Settings';
+import Schedule from './Schedule';
+import Staff from './Staff';
+import Settings from './Settings';
 
 function MainContent() {
     return (
