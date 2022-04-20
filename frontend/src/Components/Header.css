@@ -1,0 +1,45 @@
+.header{
+    position: relative;
+/*     background-color: lightblue; */
+    width: auto;
+    height: 5em;
+    padding: 1.5em 0em;
+    margin: 0;
+    border-bottom: 0.1em solid lightGray;
+}
+
+.logo{
+    height : 1.74em;
+    width : 7.74em;
+    position: absolute;
+    left: 5em;
+}
+
+.nav{
+/*     background-color: lightgreen; */
+    list-style-type: none;
+    position: relative;
+    float:right;
+    right:10em;
+}
+
+.list{
+    padding:0 2em;
+/*     border: solid black 1px; */
+}
+
+.link{
+    color: gray;
+}
+
+.link:hover{
+    color: gray;
+}
+
+
+.gear{
+/*     position:relative; */
+/*     margin-left: 1em; */
+    width:1em;
+    height:1em;
+}

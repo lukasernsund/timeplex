@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+.GeneralButton{
+  width: 10em;
+  height: 5em;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
