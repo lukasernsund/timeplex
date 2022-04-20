@@ -10,7 +10,7 @@ function Header() {
                 <Link to="/"><img className="logo" src={Logo} alt={Logo}/></Link>
                 <ul className="nav">
                         <li className="list">
-                            <Link className="link" to="/Schedule">All schedules</Link>
+                            <Link className="link" to="/AllSchedules">All schedules</Link>
                         </li>
                         <li className="list">
                             <Link className="link" to="/Create">New schedule</Link>
