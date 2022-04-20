@@ -1,8 +1,10 @@
 .Footer {
+    width: 100%;
     text-align: left;
     padding-left: 2em;
     justify-content: flex-end;
-    margin-bottom: 1em;
+/*     margin-bottom: 1em; */
     position: absolute;
     bottom: 0;
+/*     background-color: gray; */
 }

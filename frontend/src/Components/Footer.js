@@ -3,9 +3,9 @@ import './Footer.css';
 
 function Footer() {
     return (
-        <div className="Footer">
+        <footer className="Footer">
             <p> Ⓒ Lukas Ernsund, Emil Herre, Viktor Gamstorp, Christoffer Lindberg, Simon Olausson & Niklas Sundin</p>
-        </div>
+        </footer>
     );
 }
 

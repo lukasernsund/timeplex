@@ -1,3 +1,30 @@
-.startImg {
+.Body {
+    position: relative;
+/*     background-color: lightblue; */
+    width: auto;
+    height: 40em;
+}
 
+.ButtonsDiv{
+/*     background-color: lightgray; */
+    position: relative;
+    top:30em;
+}
+
+.ButtonsDiv button{
+    margin:0 3em;
+    padding: 0.5em 3em;
+    border-radius: 0.5em;
+    border: 0.2em solid #3F72AF;
+    font-weight: 600;
+}
+
+.AllButton{
+    background-color: white;
+    color: #3F72AF;
+}
+
+.NewButton{
+    background-color: #3F72AF;
+    color: white;
 }

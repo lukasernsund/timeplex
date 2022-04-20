@@ -28,6 +28,15 @@
 /*     border: solid black 1px; */
 }
 
+.link{
+    color: gray;
+}
+
+.link:hover{
+    color: gray;
+}
+
+
 .gear{
 /*     position:relative; */
 /*     margin-left: 1em; */
