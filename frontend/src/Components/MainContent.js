@@ -4,10 +4,8 @@ import Staff from './Staff';
 import Settings from './Settings';
 import Start from "./Start";
 import Create from "./Create";
-
 import {Route, Routes} from "react-router-dom";
 import AllSchedules from "./AllSchedules";
-
 
 
 function MainContent() {

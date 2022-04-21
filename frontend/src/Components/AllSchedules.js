@@ -7,7 +7,7 @@ function AllSchedules() {
     return (
         <div>
             <p> AllSchedule test</p>
-            <ul>
+            <ul style={{    listStyleType: "none"}}>
                 <Link to="/Schedule/1"><li> A scehdule</li></Link>
                 <Link to="/Schedule/2"><li> A scehdule</li></Link>
                 <Link to="/Schedule/3"><li> A scehdule</li></Link>
