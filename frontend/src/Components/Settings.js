@@ -1,78 +1,88 @@
+import '../App.css';
 import axios from 'axios';
 import React,{Component} from 'react';
+
 class Settings extends Component {
 
     state = {
 
         // Initially, no file is selected
-        selectedFile: null
+        selectedFileBEHOV: null,
+        selectedFileTYPDAG: null
     };
 
     // On file select (from the pop up)
-    onFileChange = event => {
+    onFileChangeBEHOV = event => {
         // Update the state
-        this.setState({ selectedFile: event.target.files[0] });
+        this.setState({ selectedFileBEHOV: event.target.files[0] });
+    };
+    onFileChangeTYPDAG = event => {
+        // Update the state
+        this.setState({ selectedFileTYPDAG: event.target.files[0] });
     };
 
     // On file upload (click the upload button)
-    onFileUpload = () => {
+    onFileUploadBEHOV = () => {
         // Create an object of formData
         const formData = new FormData();
 
         // Update the formData object
         formData.append(
             "myFile",
-            this.state.selectedFile,
-            this.state.selectedFile.name
+            this.state.selectedFileBEHOV,
+            this.state.selectedFileBEHOV.name
         );
 
         // Details of the uploaded file
-        console.log(this.state.selectedFile);
+        console.log(this.state.selectedFileBEHOV);
 
         // Request made to the backend api
         // Send formData object
-        axios.post("api/uploadfile", formData);
+        axios.post("api/uploadfileBEHOV", formData); //PATH TO DATABASE
+    };
+    onFileUploadTYPDAG = () => {
+        // Create an object of formData
+        const formData = new FormData();
+
+        // Update the formData object
+        formData.append(
+            "myFile",
+            this.state.selectedFileTYPDAG,
+            this.state.selectedFileTYPDAG.name
+        );
+
+        // Details of the uploaded file
+        console.log(this.state.selectedFileTYPDAG);
+
+        // Request made to the backend api
+        // Send formData object
+        axios.post("api/uploadfileTYPDAG", formData); //PATH TO DATABASE
     };
 
     // File content to be displayed after
     // file upload is complete
     fileData = () => {
-        if (this.state.selectedFile) {
-
-            return (
-                <div>
-                    <h2>File Details:</h2>
-                    <p>File Name: {this.state.selectedFile.name}</p>
-                    <p>File Type: {this.state.selectedFile.type}</p>
-                    <p>
-                        Last Modified:{" "}
-                        {this.state.selectedFile.lastModifiedDate.toDateString()}
-                    </p>
-                </div>
-            );
-        } else {
             return (
                 <div>
                     <br />
                     <h4>Choose before Pressing the Upload button</h4>
                 </div>
             );
-        }
-    };
+        };
 
     render() {
         return (
             <div>
-                <h1>
-                    GeeksforGeeks
-                </h1>
-                <h3>
-                    File Upload using React!
-                </h3>
                 <div>
-                    <input type="file" onChange={this.onFileChange} />
-                    <button onClick={this.onFileUpload}>
-                        Upload!
+                    <input type="file" onChange={this.onFileChangeBEHOV} />
+                    <button className="AllButton" onClick={this.onFileUploadBEHOV}>
+                        Upload Behovsschema .xls
+                    </button>
+                </div>
+                <div>
+                    <input type="file" onChange={this.onFileChangeTYPDAG} />
+                    <button className="AllButton" onClick={this.onFileUploadTYPDAG}>
+                        Upload Typdagar .xls
                     </button>
                 </div>
                 {this.fileData()}
