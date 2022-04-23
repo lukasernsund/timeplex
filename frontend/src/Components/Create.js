@@ -1,5 +1,7 @@
 import React from 'react';
 import Modal from "./Modal";
+import './Create.css';
+
 import axios from 'axios';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
@@ -30,16 +32,25 @@ class Create extends React.Component{
         }
 
     }
+    componentDidMount() {
+    this.refreshList();
+  }
     toggle = () => {
     this.setState({ modal: !this.state.modal });
 
   };
+
+    handleDelete = (item) => {
+    axios
+      .delete(`http://localhost:8000/api/employee/${item.id}/`)
+      .then((res) => this.refreshList());
+  };
+
     handleSubmit = (item) => {
-    this.toggle();
-    console.log("item id" + item.first_name)
-    if (item.id) {
+        this.toggle();
+        if (item.id) {
       axios
-        .put(`/api/employee/${item.id}/`, item)
+        .put(`http://localhost:8000/api/employee/${item.id}/`, item)
         .then((res) => this.refreshList());
       return;
     }
@@ -49,35 +60,35 @@ class Create extends React.Component{
       .then((res) => this.refreshList());
   };
 
-     refreshList =()=> {
+    openPopup =()=>{
         this.setState({modal:true})
+    }
+
+    editItem = (item) => {
+    this.setState({ activeItem: item, modal: !this.state.modal });
+  };
+     refreshList =()=> {
+
         axios
       .get("/api/employee/")
       .then((res) => this.setState({employeeList:res.data}))
       .catch((err) => console.log(err))
-
   };
 
-    // generateList (item){
-    // for (let i = 0; i < item.length; i++ ){
-    //     this.employeeList=item[i].first_name
-    //     console.log("inne i generate list" + this.employeeList)
-    // }
-    // }
+
 
     renderItems = () => {
     const newItems = this.state.employeeList
     return newItems.map((item) => (
+    <div className="listEmployee">
       <li
           key={item.id}
         className="list-group-item d-flex justify-content-between align-items-center"
+
       >
         <span
-          
           title={item.first_name}
-
         >
-          {console.log("test för att se vad detta är" + item.first_name)}
           {item.first_name +" "+ item.last_name}
         </span>
 
@@ -96,14 +107,14 @@ class Create extends React.Component{
           </button>
         </span>
       </li>
+    </div>
     ));
   };
 
     render() {
         return(
         <div>
-
-            <button onClick={this.refreshList} >Add employee</button>
+            <button onClick={this.openPopup} className="ButtonEmployee">Add employee</button>
             {this.state.modal ? (
           <Modal
             activeItem={this.state.activeItem}
