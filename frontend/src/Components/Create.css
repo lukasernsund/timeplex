@@ -1,0 +1,20 @@
+.ButtonEmployee{
+
+    margin: 5% 75% 3% 10%;
+
+    padding: 0.5em 3em;
+
+    color: white;
+    background-color: #3F72AF;
+    font-weight: 600;
+    border-radius: 0.5em;
+    border: 0px;
+}
+
+.listEmployee{
+    margin-left:10%;
+    margin-right: 50%;
+}
+
+
+

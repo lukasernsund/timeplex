@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './Modal.css';
 import {
   Button,
   Modal,
@@ -15,6 +16,7 @@ export default class CustomModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      notEmpty:false,
       activeItem: this.props.activeItem,
     };
   }
@@ -38,8 +40,8 @@ export default class CustomModal extends Component {
     return (
 
       <Modal isOpen={true} toggle={toggle}>
-        {this.props + "hej"}
-        <ModalHeader toggle={toggle}>Item</ModalHeader>
+      <div className="inputEmployee">
+        <ModalHeader toggle={toggle}>Add employee</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
@@ -48,6 +50,7 @@ export default class CustomModal extends Component {
                 type="text"
                 id="employee-first_name"
                 name="first_name"
+                autoComplete="off"
                 value={this.state.activeItem.first_name}
                 onChange={this.handleChange}
                 placeholder="Enter first name"
@@ -58,6 +61,7 @@ export default class CustomModal extends Component {
               <Input
                 type="text"
                 id="employee-last_name"
+                autoComplete="off"
                 name="last_name"
                 value={this.state.activeItem.last_name}
                 onChange={this.handleChange}
@@ -205,6 +209,7 @@ export default class CustomModal extends Component {
 
         </ModalBody>
         <ModalFooter>
+          {this.state.activeItem.first_name !=="" && this.state.activeItem.last_name !==""  ? (
           <Button
             color="success"
             onClick={() => onSave(this.state.activeItem)}
@@ -212,7 +217,9 @@ export default class CustomModal extends Component {
           >
             Save
           </Button>
+              ) : null}
         </ModalFooter>
+        </div>
       </Modal>
     );
   }
