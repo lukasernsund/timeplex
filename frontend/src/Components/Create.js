@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-function Staff() {
+function Create() {
     return (
         <p> Staff test</p>
     );
 }
 
-export default Staff;
+export default Create;

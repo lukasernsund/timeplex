@@ -8,7 +8,7 @@ import axios from 'axios';
     axios.defaults.xsrfCookieName = "csrftoken";
 
 
-class Create extends React.Component{
+class Staff extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -129,4 +129,4 @@ class Create extends React.Component{
     }
 }
 
-export default Create;
+export default Staff;
