@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-
+import './Create.css'
 import axios from 'axios';
+import BasicDatePicker from "./Date";
+import ComboBox from "./Search";
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
     class Create extends React.Component {
@@ -20,8 +22,13 @@ import axios from 'axios';
 
         render() {
             return (
-                <div>
-
+                <div className='CreateLayout'>
+                    <div className='DateMargin'>
+                        <BasicDatePicker />
+                    </div>
+                    <div className='SearchMargin'>
+                        <ComboBox />
+                    </div>
                 </div>
             )
 
