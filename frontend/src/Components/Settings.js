@@ -1,4 +1,5 @@
 import '../App.css';
+import './Settings.css'
 import axios from 'axios';
 import React,{Component} from 'react';
 
@@ -75,13 +76,13 @@ class Settings extends Component {
             <div>
                 <div>
                     <input type="file" onChange={this.onFileChangeBEHOV} />
-                    <button className="AllButton" onClick={this.onFileUploadBEHOV}>
+                    <button className="ButtonBehov" onClick={this.onFileUploadBEHOV}>
                         Upload Behovsschema .xls
                     </button>
                 </div>
                 <div>
                     <input type="file" onChange={this.onFileChangeTYPDAG} />
-                    <button className="AllButton" onClick={this.onFileUploadTYPDAG}>
+                    <button className="ButtonTyp" onClick={this.onFileUploadTYPDAG}>
                         Upload Typdagar .xls
                     </button>
                 </div>

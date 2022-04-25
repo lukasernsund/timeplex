@@ -2,6 +2,7 @@
 import React from 'react';
 import Modal from "./Modal";
 import './Staff.css';
+import '../App.css'
 
 import axios from 'axios';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
