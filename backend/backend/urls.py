@@ -20,6 +20,7 @@ from ikea import views
 
 router = routers.DefaultRouter()
 router.register(r'employee', views.EmployeeView, 'ikea')
+router.register(r'employeeworktime', views.WorktimeView, 'ikea')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

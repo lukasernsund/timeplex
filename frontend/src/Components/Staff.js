@@ -67,8 +67,9 @@ class Staff extends React.Component{
 
     editItem = (item) => {
     this.setState({ activeItem: item, modal: !this.state.modal });
-  };
-     refreshList =()=> {
+     };
+
+    refreshList =()=> {
 
         axios
       .get("/api/employee/")

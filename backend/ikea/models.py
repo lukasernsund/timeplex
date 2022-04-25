@@ -2,6 +2,14 @@ from django.db import models
 
 # Create your models here.
 
+class EmployeeWorktime(models.Model):
+    employeeID = models.ForeignKey('Employee', on_delete=models.CASCADE)
+    start_time = models.CharField(max_length=100)
+    end_time = models.CharField(max_length=100)
+
+    def _str_(self):
+        return self.employeeID
+
 class Employee(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=100)
