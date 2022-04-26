@@ -19,6 +19,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 
             this.state = {
                 workTimeList: [],
+                employeeWorking:[],
             }
         }
 
@@ -42,8 +43,11 @@ import Autocomplete from "@mui/material/Autocomplete";
                     id="combo-box-demo"
                     options={newItems}
                     getOptionLabel={(newItems)=>newItems.first_name.toString() +" "+ newItems.last_name.toString()}
+                    onChange={(event, value) => this.setState(prevState => ({
+                        employeeWorking: [value, ...prevState.employeeWorking]
+                    }))}
                     sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} label="Add empleyee"/>}
+                    renderInput={(params) => <TextField {...params} label="Add employee"/>}
                 />
                 </div>
 
@@ -54,7 +58,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 
         renderItems = () => {
-            const newItems = this.state.workTimeList
+            const newItems = this.state.employeeWorking
             console.log(newItems);
             return newItems.map((item) => (
                 <div>
