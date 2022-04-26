@@ -9,7 +9,7 @@ export default function ComboBox() {
             id="combo-box-demo"
             options={top100Films}
             sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Movie"/>}
+            renderInput={(params) => <TextField {...params} label="Add empleyee"/>}
         />
     );
 }

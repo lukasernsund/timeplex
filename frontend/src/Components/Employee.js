@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Modal from "./Modal";
-import './Staff.css';
+import './Employee.css';
 import '../App.css'
 
 import axios from 'axios';
@@ -9,7 +9,7 @@ import axios from 'axios';
     axios.defaults.xsrfCookieName = "csrftoken";
 
 
-class Staff extends React.Component{
+class Employee extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -131,4 +131,4 @@ class Staff extends React.Component{
     }
 }
 
-export default Staff;
+export default Employee;

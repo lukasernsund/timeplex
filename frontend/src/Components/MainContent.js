@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Schedule from './Schedule';
-import Staff from './Staff';
+import Employee from './Employee';
 import Settings from './Settings';
 import Start from "./Start";
 import Create from "./Create";
@@ -15,7 +15,7 @@ function MainContent() {
                 <Route path="/" element={<Start />}></Route>
                 <Route path="/Create" element={<Create />}></Route>
                 <Route path="/Settings" element={<Settings />}></Route>
-                <Route path="/Staff" element={<Staff />}></Route>
+                <Route path="/Employee" element={<Employee />}></Route>
                 <Route path="/AllSchedules/" element={<AllSchedules />}></Route>
                 <Route path="/Schedule/:id" element={<Schedule />}></Route>
             </Routes>

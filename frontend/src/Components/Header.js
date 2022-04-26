@@ -16,7 +16,7 @@ function Header() {
                             <Link className="link" to="/Create">New schedule</Link>
                         </li>
                         <li className="list">
-                            <Link className="link" to="/Staff">Employees</Link>
+                            <Link className="link" to="/Employee">Employees</Link>
                         </li>
                         <li className="list">
                             <Link to="/Settings">

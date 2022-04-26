@@ -1,10 +1,10 @@
 .CreateLayout{
-    position: absolute;
     left: 3em;
 }
 .DateMargin{
     margin-top: 3em;
     font-weight: lighter;
+    margin-left: 4em;
 
 }
 .SearchMargin{
