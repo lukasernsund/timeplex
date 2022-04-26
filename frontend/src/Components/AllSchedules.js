@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import VirtualizedList from "./ListAllSchedule";
 
 
 function AllSchedules() {
@@ -7,6 +8,7 @@ function AllSchedules() {
     return (
         <div>
             <p> AllSchedule test</p>
+            <VirtualizedList />
             <ul style={{    listStyleType: "none"}}>
                 <Link to="/Schedule/1"><li> A scehdule</li></Link>
                 <Link to="/Schedule/2"><li> A scehdule</li></Link>
