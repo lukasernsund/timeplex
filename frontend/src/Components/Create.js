@@ -111,13 +111,12 @@ import Autocomplete from "@mui/material/Autocomplete";
         render() {
             return (
                 <div>
-                    {this.test()}
                 <div className='CreateLayout'>
                     <div className='DateMargin'>
                         <BasicDatePicker />
                     </div>
                     <div className='SearchMargin'>
-
+                        {this.test()}
                     </div>
                 </div>
                     <div className='WorkingList'>
