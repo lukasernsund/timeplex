@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import './Create.css'
+import '../App.css'
 import axios from 'axios';
 import BasicDatePicker from "./Date";
 import ComboBox from "./Search";
+import {Link} from "react-router-dom";
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
     class Create extends React.Component {
@@ -22,12 +24,18 @@ import ComboBox from "./Search";
 
         render() {
             return (
+                <div>
                 <div className='CreateLayout'>
                     <div className='DateMargin'>
                         <BasicDatePicker />
                     </div>
                     <div className='SearchMargin'>
                         <ComboBox />
+                    </div>
+                </div>
+                    <div className='GenerateButton'>
+                        <Link to="/AllSchedules/"><button className="BlueButton">Generate</button></Link>
+
                     </div>
                 </div>
             )

@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import VirtualizedList from "./ListAllSchedule";
+import './AllSchedules.css'
 
 
 function AllSchedules() {
 
     return (
         <div>
-            <p> AllSchedule test</p>
+            <div className='List'>
             <VirtualizedList />
+            </div>
             <ul style={{    listStyleType: "none"}}>
                 <Link to="/Schedule/1"><li> A scehdule</li></Link>
                 <Link to="/Schedule/2"><li> A scehdule</li></Link>
