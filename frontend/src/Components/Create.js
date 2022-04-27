@@ -7,8 +7,14 @@ import BasicDatePicker from "./Date";
 import {Link} from "react-router-dom";
 import Modal from "./Modal";
 import {Input} from "reactstrap";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
 
@@ -20,6 +26,7 @@ import Autocomplete from "@mui/material/Autocomplete";
             this.state = {
                 workTimeList: [],
                 employeeWorking:[],
+                date:""
             }
         }
 
@@ -117,7 +124,19 @@ import Autocomplete from "@mui/material/Autocomplete";
                 <div>
                 <div className='CreateLayout'>
                     <div className='DateMargin'>
-                        <BasicDatePicker />
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+
+                            <DatePicker
+                                label="Date"
+                                value={this.state.date}
+                                onChange={(newValue) => {
+                                    this.setState({date:newValue.toISOString().split('T')[0]})
+                                }
+                                }
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
+
                     </div>
                     <div className='SearchMargin'>
                         {this.test()}
