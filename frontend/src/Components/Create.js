@@ -25,16 +25,58 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
             this.state = {
                 workTimeList: [],
+                date:"",
+                worktimeEmployee:[],
                 employeeWorking:[],
-                date:""
+                activeItem:{
+                    id:0,
+                    start_time:"",
+                    end_time:""
+                }
             }
-        }
+            }
+
 
         componentDidMount() {
             this.refreshList();
         };
 
+        saveItem = (item) => {
+            console.log(item)
+            axios
+                .post(`http://localhost:8000/api/employeeworktime/${item.id}/`, item)
+                .then((res) => this.refreshList());
+        }
+        handleChange = (e) => {
+            console.log("inne i handle change")
+            this.setState({ activeItem:e.target.value});
+            console.log(this.state.activeItem)
+        };
+
+        handleDelete = (item) => {
+            this.setState({
+                employeeWorking: this.state.employeeWorking.filter(function(test) {
+                    return test !== item
+                })
+                  })
+        };
+
+        AddEmployee = (item) => {
+            const test = this.state.worktimeEmployee
+            console.log(test)
+
+            if(this.state.employeeWorking.includes(item)){
+                    return
+            }
+            this.setState(prevState => ({
+            employeeWorking: [item, ...prevState.employeeWorking]}))
+            }
+
         refreshList = () => {
+            axios
+                .get("/api/employeeworktime/")
+                .then((res) => this.setState({worktimeEmployee: res.data}))
+                .catch((err) => console.log(err))
             axios
                 .get("/api/employee/")
                 .then((res) => this.setState({workTimeList: res.data}))
@@ -49,10 +91,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
                     disablePortal
                     id="combo-box-demo"
                     options={newItems}
+                    disableClearable
                     getOptionLabel={(newItems)=>newItems.first_name.toString() +" "+ newItems.last_name.toString()}
-                    onChange={(event, value) => this.setState(prevState => ({
-                        employeeWorking: [value, ...prevState.employeeWorking]
-                    }))}
+                    onChange={(event, value) => this.AddEmployee(value)}
                     sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Add employee"/>}
                 />
@@ -112,6 +153,13 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
               onClick={() => this.handleDelete(item)}
           >
             Delete
+          </button>
+
+                             <button
+                                 className="btn btn-danger"
+                                 onClick={() => this.saveItem(item)}
+                             >
+            Save
           </button>
         </span>
                     </li>
