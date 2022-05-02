@@ -14,7 +14,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import ExcelDownload from "./Excel";
 import {ExcelExport} from "@progress/kendo-react-excel-export";
 import products from "./products.json";
 import {Grid, GridToolbar} from "@progress/kendo-react-grid";
@@ -39,7 +38,11 @@ import {Grid, GridToolbar} from "@progress/kendo-react-grid";
                 }
             }
             }
-
+        export = () => {
+            {
+                this._export.save();
+            }
+        };
 
         componentDidMount() {
             this.refreshList();
@@ -198,13 +201,9 @@ import {Grid, GridToolbar} from "@progress/kendo-react-grid";
                         {this.renderItems()}
                 </div>
                     <div className='GenerateButton'>
-                        <Link to="/AllSchedules/"><button className="BlueButton">Generate</button></Link>
-                        <ExcelExport data={products} ref={exporter => this._export = exporter}>
-                                    <button title="Export Excel" className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary" onClick={this.export}>
-                                        Export to Excel
-                                    </button>
-
-                        </ExcelExport>;
+                        <ExcelExport data={this.state.employeeWorking} ref={exporter => this._export = exporter}>
+                        <Link to="/AllSchedules/"><button className="BlueButton" onClick={this.export} >Generate</button></Link>
+                        </ExcelExport>
                     </div>
                 </div>
             )
