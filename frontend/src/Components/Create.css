@@ -4,12 +4,10 @@
 .DateMargin{
     margin-top: 3em;
     margin-left: 4em;
+    margin-bottom: 2em;
 
 }
-.SearchMargin{
-    margin-top: 3em;
-    margin-left: 4em;
-}
+
 .BlueButton{
     background-color: #3F72AF;
     color: white;
