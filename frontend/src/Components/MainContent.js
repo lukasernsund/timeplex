@@ -7,7 +7,6 @@ import Create from "./Create";
 import {Route, Routes} from "react-router-dom";
 import AllSchedules from "./AllSchedules";
 
-
 function MainContent() {
     return (
         <div>
