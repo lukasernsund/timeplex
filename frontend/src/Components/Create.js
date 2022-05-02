@@ -14,6 +14,10 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import ExcelDownload from "./Excel";
+import {ExcelExport} from "@progress/kendo-react-excel-export";
+import products from "./products.json";
+import {Grid, GridToolbar} from "@progress/kendo-react-grid";
 
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
@@ -195,7 +199,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
                 </div>
                     <div className='GenerateButton'>
                         <Link to="/AllSchedules/"><button className="BlueButton">Generate</button></Link>
+                        <ExcelExport data={products} ref={exporter => this._export = exporter}>
+                                    <button title="Export Excel" className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary" onClick={this.export}>
+                                        Export to Excel
+                                    </button>
 
+                        </ExcelExport>;
                     </div>
                 </div>
             )
