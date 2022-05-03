@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Employee
 from .models import EmployeeWorktime
+from import_export import resources
+
 
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'greeter','pins','eco', 'customer_service', 'pins_responsible', 'backoffice',
