@@ -10,8 +10,6 @@ import {Input} from "reactstrap";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-
-
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
@@ -28,28 +26,40 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
                 date:"",
                 worktimeEmployee:[],
                 employeeWorking:[],
+                test123: [],
                 activeItem:{
-                    id:0,
+                    employeeID: 10,
                     start_time:"",
                     end_time:""
+                },
+                saveItem:{
+                    employeeID: 10,
+                    start_time:"test2",
+                    end_time:"test2"
                 }
             }
             }
 
 
         componentDidMount() {
-            this.refreshList();
+           this.refreshList()
+                
+            
         };
 
         saveItem = (item) => {
-            console.log(item)
+            console.log("inne i save" + this.state.activeItem)
+            this.state.activeItem.employeeID=item.id
             axios
-                .post(`http://localhost:8000/api/employeeworktime/${item.id}/`, item)
+                .post(`http://localhost:8000/api/employeeworktime/`,this.state.activeItem )
                 .then((res) => this.refreshList());
         }
+
         handleChange = (e) => {
-            console.log("inne i handle change")
-            this.setState({ activeItem:e.target.value});
+            let { name, value } = e.target;
+            const activeItem = { ...this.state.activeItem, [name]: value };
+            
+            this.setState({ activeItem }); 
             console.log(this.state.activeItem)
         };
 
@@ -70,13 +80,23 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
             }
             this.setState(prevState => ({
             employeeWorking: [item, ...prevState.employeeWorking]}))
-            }
+            
+            console.log (this.state.employeeWorking)
+            for (const employee in this.state.employeeWorking){
+                console.log("inne i forlop?" + employee)
+        
+                this.state.activeItem.employeeID=employee.id
+                console.log(this.state.activeItem.employeeID)
+                axios
+                .post(`http://localhost:8000/api/employeeworktime/`,this.state.activeItem )
+                .then((res) => this.refreshList());
+        }
+
+
+        }
 
         refreshList = () => {
-            axios
-                .get("/api/employeeworktime/")
-                .then((res) => this.setState({worktimeEmployee: res.data}))
-                .catch((err) => console.log(err))
+            
             axios
                 .get("/api/employee/")
                 .then((res) => this.setState({workTimeList: res.data}))
@@ -107,7 +127,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
         renderItems = () => {
             const newItems = this.state.employeeWorking
-            console.log(newItems);
+               
             return newItems.map((item) => (
                 <div>
                 <div className="listEmployee">
@@ -120,13 +140,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
             title={item.first_name}
         >
           {item.first_name +" "+ item.last_name}
+
         </span>
         <span>
             <Input
                 type="time"
                 id="employee-first_name"
-                name="first_name"
+                name="start_time"
                 autoComplete="off"
+                value={this.state.activeItem.start_time}
                 onChange={this.handleChange}
                 placeholder="Enter first name"
                             />
@@ -135,7 +157,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
             <Input
                 type="time"
                 id="employee-first_name"
-                name="first_name"
+                name="end_time"
                 autoComplete="off"
                 onChange={this.handleChange}
                 placeholder="Enter first name"
