@@ -93,7 +93,7 @@ import {Grid, GridToolbar} from "@progress/kendo-react-grid";
         test = () => {
             const newItems = this.state.workTimeList
 
-            return (<div>
+            return (<div className="autoCompleter">
                 <Autocomplete
                     disablePortal
                     id="combo-box-demo"
@@ -116,7 +116,7 @@ import {Grid, GridToolbar} from "@progress/kendo-react-grid";
             const newItems = this.state.employeeWorking
             console.log(newItems);
             return newItems.map((item) => (
-                <div>
+                <div className="employeeWrapper">
                 <div className="listEmployee">
                     <li
                         key={item.id}

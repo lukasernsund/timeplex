@@ -20,7 +20,7 @@ function renderRow(props) {
 export default function VirtualizedList() {
     return (
         <Box
-            sx={{ width: '100%', height: 400, maxWidth: 900, bgcolor: 'background.paper' }}
+            sx={{ width: '100%', height: 600, maxWidth: 900, bgcolor: 'background.paper' }}
         >
             <FixedSizeList
                 height={400}

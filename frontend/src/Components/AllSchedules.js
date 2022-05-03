@@ -11,13 +11,6 @@ function AllSchedules() {
             <div className='List'>
             <VirtualizedList />
             </div>
-            <ul style={{    listStyleType: "none"}}>
-                <Link to="/Schedule/1"><li> A scehdule</li></Link>
-                <Link to="/Schedule/2"><li> A scehdule</li></Link>
-                <Link to="/Schedule/3"><li> A scehdule</li></Link>
-                <Link to="/Schedule/4"><li> A scehdule</li></Link>
-                <Link to="/Schedule/5"><li> A scehdule</li></Link>
-            </ul>
         </div>
     );
 }
