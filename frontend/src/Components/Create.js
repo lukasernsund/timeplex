@@ -27,11 +27,13 @@ class Create extends React.Component {
       worktimeEmployee: [],
       employeeWorking: [],
       allWorktimes: [],
+      objectList:[],
       activeItem: {
         employeeID: 10,
         start_time: "empty",
         end_time: "empty",
-      },
+    },
+
     };
   }
 
@@ -52,9 +54,12 @@ class Create extends React.Component {
 
   handleChange = (e) => {
     let { name, value } = e.target;
+    //name = start_time & end_time, value = vald tid
     const activeItem = { ...this.state.activeItem, [name]: value };
-
     this.setState({ activeItem });
+    console.log("objects" + name + value )
+    
+    
   };
 
   handleDelete = (item) => {
@@ -66,23 +71,13 @@ class Create extends React.Component {
   };
 
   AddEmployee = (item) => {
-    console.log(item);
 
     if (this.state.employeeWorking.includes(item)) {
       return;
     }
     this.setState((prevState) => ({
       employeeWorking: [item, ...prevState.employeeWorking],
-    }));
-
-    // this.state.activeItem.employeeID = item.id;
-    // console.log("aktivtitem" + this.state.activeItem.employeeID);
-    // axios
-    //   .post(
-    //     `http://localhost:8000/api/employeeworktime/`,
-    //     this.state.activeItem
-    //   )
-    //   .then((res) => this.refreshList());
+    }));  
   };
 
   refreshList = () => {
@@ -97,9 +92,12 @@ class Create extends React.Component {
       .catch((err) => console.log(err));
   };
 
+  testa = (itemID) =>{
+    
+  }
+
   test = () => {
     const newItems = this.state.workTimeList;
-
     return (
       <div>
         <Autocomplete
@@ -120,14 +118,6 @@ class Create extends React.Component {
     );
   };
 
-  findEmployee = (itemId) => {
-    const allWorktimesItems = this.state.allWorktimes;
-    const oneEmployeeWorktime = allWorktimesItems.find((worktime) => {
-      return worktime.employeeID == itemId;
-    });
-    return oneEmployeeWorktime.start_time;
-  };
-
   renderItems = () => {
     const newItems = this.state.employeeWorking;
     return newItems.map((item) => (
@@ -137,14 +127,15 @@ class Create extends React.Component {
             key={item.id}
             className="list-group-item d-flex justify-content-between align-items-center"
           >
-            <span title={item.first_name}>{item.first_name}</span>
+            <span title={item.employeeID}>{item.start_time}</span>
             <span>
               <Input
                 type="time"
                 id="employee-first_name"
                 name="start_time"
                 autoComplete="off"
-                onChange={this.handleChange}
+                
+                onChange={this.handleChange & this.testa(item.id)}
                 placeholder="Enter first name"
               />
             </span>
@@ -154,6 +145,7 @@ class Create extends React.Component {
                 id="employee-first_name"
                 name="end_time"
                 autoComplete="off"
+                
                 onChange={this.handleChange}
                 placeholder="Enter first name"
               />
