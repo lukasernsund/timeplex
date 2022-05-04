@@ -104,7 +104,7 @@ class Schedule extends React.Component{
   
     
     return newItems.map((item) => (
-    <div className="listEmployee"> 
+    <div className="listSchedule"> 
       <li
           key={item.id}
 
@@ -139,7 +139,7 @@ class Schedule extends React.Component{
     render() {
         return(
         <div>
-            <button onClick={this.openPopup} className="ButtonEmployee">Add schedule</button>
+            {/* <button onClick={this.openPopup} className="ButtonEmployee">Add schedule</button> */}
             {this.state.modal ? (
           <Modal
             activeItem={this.state.activeItem}
