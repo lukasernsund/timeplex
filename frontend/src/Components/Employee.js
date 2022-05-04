@@ -56,8 +56,8 @@ class Employee extends React.Component{
         .then((res) => this.refreshList());
       return;
     }
-
-    axios
+    
+    axios 
       .post("http://localhost:8000/api/employee/", item) //tidigare stod det endast /api/employee/
       .then((res) => this.refreshList());
   };
@@ -72,6 +72,7 @@ class Employee extends React.Component{
 
     refreshList =()=> {
 
+      
         axios
       .get("/api/employee/")
       .then((res) => this.setState({employeeList:res.data}))
@@ -82,6 +83,9 @@ class Employee extends React.Component{
 
     renderItems = () => {
     const newItems = this.state.employeeList
+   
+  
+    
     return newItems.map((item) => (
     <div className="listEmployee">
       <li
