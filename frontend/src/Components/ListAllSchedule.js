@@ -4,14 +4,17 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { FixedSizeList } from 'react-window';
+import { Link } from 'react-router-dom';
 
 function renderRow(props) {
     const { index, style } = props;
 
     return (
         <ListItem style={style} key={index} component="div" disablePadding>
-            <ListItemButton>
-                <ListItemText primary={`Schedule ${index + 1}`} />
+            <ListItemButton> 
+                <Link to={"/Schedule/1"}>  
+                    <ListItemText primary={`Schedule ${index + 1}`} />
+                </Link>
             </ListItemButton>
         </ListItem>
     );
