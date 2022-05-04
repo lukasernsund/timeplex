@@ -51,11 +51,10 @@ import {Grid, GridToolbar} from "@progress/kendo-react-grid";
         saveItem = (item) => {
             console.log(item)
             axios
-                .post(`http://localhost:8000/api/employeeworktime/${item.id}/`, item)
+                .post(`http://localhost:8000/api/employeeworktime/`, item)
                 .then((res) => this.refreshList());
         }
         handleChange = (e) => {
-            console.log("inne i handle change")
             this.setState({ activeItem:e.target.value});
             console.log(this.state.activeItem)
         };
@@ -132,7 +131,7 @@ import {Grid, GridToolbar} from "@progress/kendo-react-grid";
             <Input
                 type="time"
                 id="employee-first_name"
-                name="first_name"
+                name="start_time"
                 autoComplete="off"
                 onChange={this.handleChange}
                 placeholder="Enter first name"
@@ -142,7 +141,7 @@ import {Grid, GridToolbar} from "@progress/kendo-react-grid";
             <Input
                 type="time"
                 id="employee-first_name"
-                name="first_name"
+                name="end_time"
                 autoComplete="off"
                 onChange={this.handleChange}
                 placeholder="Enter first name"
@@ -177,11 +176,12 @@ import {Grid, GridToolbar} from "@progress/kendo-react-grid";
         render() {
             return (
                 <div>
-                <div className='CreateLayout'>
-                    <div className='DateMargin'>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div>
+                    <div>
+                        <LocalizationProvider className='CreateLayout' dateAdapter={AdapterDateFns}>
 
                             <DatePicker
+                                className='DateMargin'
                                 label="Date"
                                 value={this.state.date}
                                 onChange={(newValue) => {
