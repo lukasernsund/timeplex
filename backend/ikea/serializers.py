@@ -1,3 +1,4 @@
+from .models import AllSchedules
 from rest_framework import serializers
 from .models import Employee
 from .models import EmployeeWorktime
@@ -12,3 +13,8 @@ class WorktimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeWorktime
         fields = ('id', 'employeeID',  'start_time', 'end_time' )
+
+class AllSchedulesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AllSchedules
+        fields = ('id', 'date',  'name' )        

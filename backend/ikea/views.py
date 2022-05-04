@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from .models import AllSchedules
+from .serializers import AllSchedulesSerializer
 from rest_framework import viewsets
 from .serializers import EmployeeSerializer
 from .serializers import WorktimeSerializer
@@ -15,4 +17,8 @@ class EmployeeView(viewsets.ModelViewSet):
 class WorktimeView(viewsets.ModelViewSet):
     serializer_class = WorktimeSerializer
     queryset = EmployeeWorktime.objects.all()
+
+class AllSchedulesView(viewsets.ModelViewSet):
+    serializer_class = AllSchedulesSerializer
+    queryset = AllSchedules.objects.all()
 
