@@ -114,7 +114,7 @@ class Schedule extends React.Component{
         <span
           title={item.first_name}
         >
-          {item.date +" "+ item.name}
+          {"Date: "+item.date +" "+"Name: "+ item.name}
         </span>
 
         <span>
