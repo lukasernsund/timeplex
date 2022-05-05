@@ -107,9 +107,7 @@ class Schedule extends React.Component{
 
     renderItems = () => {
     const newItems = this.state.SchedulesList
-   
   
-    
     return newItems.map((item) => (
     <div className="listSchedule"> 
       <li
@@ -151,7 +149,6 @@ class Schedule extends React.Component{
           
         </span>
       </li>
-
     </div>
     ));
   };
