@@ -121,8 +121,8 @@ class Create extends React.Component {
   renderItems = () => {
     const newItems = this.state.employeeWorking;
     return newItems.map((item) => (
-      <div>
-        <div className="listEmployee">
+      <div className="listEmployee">
+        <ul>
           <li
             key={item.id}
             className="list-group-item d-flex justify-content-between align-items-center"
@@ -152,34 +152,34 @@ class Create extends React.Component {
             </span>
             <span>
               <button
-                className="btn btn-secondary mr-2"
+                className="btn btn-warning mr-2"
                 onClick={() => this.editItem(item)}
               >
-                Edit
+                Request
               </button>
               <button
-                className="btn btn-danger"
+                className="btn btn-danger mr-2"
                 onClick={() => this.handleDelete(item)}
               >
                 Delete
               </button>
 
               <button
-                className="btn btn-danger"
+                className="btn btn-success mr-2"
                 onClick={() => this.saveItem(item)}
               >
                 Save
               </button>
             </span>
           </li>
+          </ul>
         </div>
-      </div>
     ));
   };
   render() {
     return (
       <div>
-        <div className="CreateLayout">
+        <div>
           <div className="DateMargin">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
@@ -191,13 +191,13 @@ class Create extends React.Component {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
-          </div>
           <div className="SearchMargin">{this.test()}</div>
+        </div>
         </div>
         <div className="WorkingList">{this.renderItems()}</div>
         <div className="GenerateButton">
           <Link to="/AllSchedules/">
-            <button className="BlueButton">Generate</button>
+            <button className="btn btn-primary">Generate</button>
           </Link>
         </div>
       </div>
