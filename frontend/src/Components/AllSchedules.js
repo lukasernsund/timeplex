@@ -31,6 +31,7 @@ import './AllSchedules.css';
 import '../App.css'
 
 import axios from 'axios';
+import { Link } from 'react-router-dom';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
 
@@ -105,12 +106,19 @@ class Schedule extends React.Component{
     
     return newItems.map((item) => (
     <div className="listSchedule"> 
-      <li
+      <Link
+        to={"/Schedule/"+item.date}
+        key={item.id}
+        className="list-group-item d-flex justify-content-between align-items-center text-muted"
+>
+      
+      
+      {/* <li
           key={item.id}
 
         className="list-group-item d-flex justify-content-between align-items-center"
 
-      >
+      > */}
         <span
           title={item.first_name}
         >
@@ -124,14 +132,22 @@ class Schedule extends React.Component{
           >
             Edit
           </button>
+          <button // Download BUTTON
+            className="btn btn-secondary mr-2"
+            onClick={() => this.editItem(item)}
+          >
+            Download
+          </button>
           <button //DELETE BUTTON
             className="btn btn-danger"
             onClick={() => this.handleDelete(item)}
           >
             Delete
           </button>
+          
         </span>
-      </li>
+      {/* </li> */}
+      </Link>
     </div>
     ));
   };
