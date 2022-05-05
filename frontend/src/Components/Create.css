@@ -1,13 +1,27 @@
-.CreateLayout{
-    left: 3em;
-}
 .DateMargin{
+    text-align: left;
     margin-top: 3em;
-    margin-left: 4em;
-    margin-bottom: 2em;
+    margin-left: 3em;
+}
+.SearchMargin{
+    margin-top: 2em;
+}
+.WorkingList{
+    margin-top: 2em;
+}
+.listEmployee{
+    margin: 0%;
+}
+.listEmployee ul{
+    list-style-type: none;
+margin: 0%;
 
 }
+.listEmployee li{
+width: 70%;
+margin-top: 0%;
 
+}
 .BlueButton{
     background-color: #3F72AF;
     color: white;
@@ -22,4 +36,8 @@
     position: absolute;
     right: 7em;
     bottom: 7em;
+}
+.btn-primary {
+    background: #3F72AF;
+    font-weight: bold;
 }

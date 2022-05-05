@@ -1,4 +1,6 @@
 from django.contrib import admin
+
+from .models import AllSchedules
 from .models import Employee
 from .models import EmployeeWorktime
 
@@ -8,7 +10,11 @@ class EmployeeAdmin(admin.ModelAdmin):
 
 class WorktimeAdmin(admin.ModelAdmin):
     list_display = ('employeeID','start_time', 'end_time')
+
+class AllSchedulesAdmin(admin.ModelAdmin):
+    list_display = ('date','name')
 # Register your models here.
 
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(EmployeeWorktime, WorktimeAdmin)
+admin.site.register(AllSchedules, AllSchedulesAdmin)

@@ -17,12 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from ikea import views
+from ikea.views import export_users_xls
 
 router = routers.DefaultRouter()
 router.register(r'employee', views.EmployeeView, 'ikea')
 router.register(r'employeeworktime', views.WorktimeView, 'ikea')
+router.register(r'allschedules', views.AllSchedulesView, 'ikea')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('test/', export_users_xls)
 ]

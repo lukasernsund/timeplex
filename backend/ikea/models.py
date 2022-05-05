@@ -28,3 +28,10 @@ class Employee(models.Model):
 
     def _str_(self):
         return self.first_name
+
+class AllSchedules(models.Model):
+    date = models.DateField()
+    name = models.CharField(max_length=50)
+
+    def _str_(self):
+        return self.date
