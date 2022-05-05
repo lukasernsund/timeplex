@@ -9,15 +9,15 @@
 .WorkingList{
     margin-top: 2em;
 }
-.listEmployee{
+.listEmployeeWorking{
     margin: 0%;
 }
-.listEmployee ul{
+.listEmployeeWorking ul{
     list-style-type: none;
 margin: 0%;
 
 }
-.listEmployee li{
+.listEmployeeWorking li{
 width: 70%;
 margin-top: 0%;
 

@@ -126,7 +126,7 @@ class Create extends React.Component {
   renderItems = () => {
     const newItems = this.state.employeeWorking;
     return newItems.map((item) => (
-      <div className="listEmployee">
+      <div className="listEmployeeWorking">
         <ul>
           <li
             key={item.id}
