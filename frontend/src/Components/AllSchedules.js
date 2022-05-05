@@ -40,7 +40,7 @@ class Schedule extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            employeeList: [],
+            SchedulesList: [],
             modal: false,
             activeItem:{
                 date: "2022,11,10",
@@ -81,7 +81,7 @@ class Schedule extends React.Component{
         this.setState({modal:true})
         console.log("inne i openpupup")
         console.log(this.state.activeItem)
-        console.log(this.state.employeeList)
+        console.log(this.state.SchedulesList)
     }
 
     editItem = (item) => {
@@ -93,7 +93,7 @@ class Schedule extends React.Component{
       
         axios
       .get("/api/allschedules/")
-      .then((res) => this.setState({employeeList:res.data}))
+      .then((res) => this.setState({SchedulesList:res.data}))
       .catch((err) => console.log(err))
   };
 
@@ -106,30 +106,27 @@ class Schedule extends React.Component{
 
 
     renderItems = () => {
-    const newItems = this.state.employeeList
+    const newItems = this.state.SchedulesList
    
   
     
     return newItems.map((item) => (
     <div className="listSchedule"> 
-      <Link
+      <li
+        key={item.id}
+        className="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <Link //Om man vill ha hela lådan som klickbar wrappar man hela <li> med denna <link>, men då blir knapparna också länkade till detta..
         to={"/Schedule/"+item.date}
         key={item.id}
-        className="list-group-item d-flex justify-content-between align-items-center text-muted"
->
-      
-      
-      {/* <li
-          key={item.id}
-
-        className="list-group-item d-flex justify-content-between align-items-center"
-
-      > */}
-        <span
-          title={item.first_name}
-        >
-          {"Date: "+item.date +" "+"Name: "+ item.name}
-        </span>
+        className="text-muted"
+      >
+          <span
+            title={item.first_name}
+          >
+            {"Date: "+item.date +" "+"Name: "+ item.name}
+          </span>
+        </Link>
 
         <span>
           <button // EDIT BUTTON
@@ -153,8 +150,8 @@ class Schedule extends React.Component{
           </button>
           
         </span>
-      {/* </li> */}
-      </Link>
+      </li>
+
     </div>
     ));
   };
