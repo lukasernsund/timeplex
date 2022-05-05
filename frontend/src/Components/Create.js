@@ -125,12 +125,15 @@ class Create extends React.Component {
         <ul>
           <li
             key={item.id}
-            className="list-group-item d-flex justify-content-between align-items-center"
+            className="list-group-item d-flex justify-content-md-start align-items-center"
           >
-        <span title={item.first_name}>
+        <span title={item.first_name} className="justify-content-start w-25">
           {item.first_name + " " + item.last_name}
         </span>
-        <span title={item.employeeID}>
+            <span className="mr-5"></span>
+            <span className="mr-5"></span>
+
+            <span title={item.employeeID}>
           {item.start_time}
           </span>
         <span>
@@ -143,6 +146,9 @@ class Create extends React.Component {
                 onChange={this.handleChange & this.testa(item.id)}
                 placeholder="Enter first name"
               />
+           </span>
+            <span className="mr-3"></span>
+            <span>
               <Input
                 type="time"
                 id="employee-first_name"
@@ -153,6 +159,9 @@ class Create extends React.Component {
                 placeholder="Enter first name"
               />
             </span>
+            <span className="mr-5"></span>
+            <span className="mr-5"></span>
+
             <span>
               <button
                 className="btn btn-warning mr-2"
