@@ -97,6 +97,12 @@ class Schedule extends React.Component{
       .catch((err) => console.log(err))
   };
 
+  excel = () => {
+    axios
+      .get('http://localhost:8000/test/') //Här borde Urln vara olika beroende på vilket scehma man klickar på.
+                                          //Jag vet inte hur man länkar detta men skriver upp på to-do /Simon
+      .then((res) => window.open(res.config.url))
+  }
 
 
     renderItems = () => {
@@ -133,8 +139,9 @@ class Schedule extends React.Component{
             Edit
           </button>
           <button // Download BUTTON
-            className="btn btn-secondary mr-2"
-            onClick={() => this.editItem(item)}
+            href="http://localhost:8000/test"
+            className="btn btn-success mr-2"
+            onClick={() => this.excel()}
           >
             Download
           </button>
