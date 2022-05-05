@@ -132,8 +132,13 @@ class Create extends React.Component {
             key={item.id}
             className="list-group-item d-flex justify-content-between align-items-center"
           >
-            <span title={item.employeeID}>{item.start_time}</span>
-            <span>
+        <span title={item.first_name}>
+          {item.first_name + " " + item.last_name}
+        </span>
+        <span title={item.employeeID}>
+          {item.start_time}
+          </span>
+        <span>
               <Input
                 type="time"
                 id="employee-first_name"
@@ -157,26 +162,27 @@ class Create extends React.Component {
             </span>
             <span>
               <button
-                className="btn btn-secondary mr-2"
+                className="btn btn-warning mr-2"
                 onClick={() => this.editItem(item)}
               >
-                Edit
+                Request
               </button>
               <button
-                className="btn btn-danger"
+                className="btn btn-danger mr-2"
                 onClick={() => this.handleDelete(item)}
               >
                 Delete
               </button>
 
               <button
-                className="btn btn-danger"
+                className="btn btn-success mr-2"
                 onClick={() => this.saveItem(item)}
               >
                 Save
               </button>
             </span>
           </li>
+          </ul>
         </div>
       </div>
     ));
@@ -184,7 +190,7 @@ class Create extends React.Component {
   render() {
     return (
       <div>
-        <div className="CreateLayout">
+        <div>
           <div className="DateMargin">
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
