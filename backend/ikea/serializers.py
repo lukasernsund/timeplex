@@ -12,7 +12,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class WorktimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeWorktime
-        fields = ('id', 'employeeID',  'start_time', 'end_time' )
+        fields = ('id', 'employeeID',  'start_time', 'end_time', 'date_schedule' )
 
 class AllSchedulesSerializer(serializers.ModelSerializer):
     class Meta:
