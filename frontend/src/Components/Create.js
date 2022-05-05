@@ -117,6 +117,11 @@ class Create extends React.Component {
       </div>
     );
   };
+  excel = () => {
+    axios
+      .get('http://localhost:8000/test/')
+      .then((res) => window.open(res.config.url))
+  }
 
   renderItems = () => {
     const newItems = this.state.employeeWorking;
@@ -196,9 +201,10 @@ class Create extends React.Component {
         </div>
         <div className="WorkingList">{this.renderItems()}</div>
         <div className="GenerateButton">
-          <Link to="/AllSchedules/">
-            <button className="BlueButton">Generate</button>
-          </Link>
+        <button href="http://localhost:8000/test" className="BlueButton" onClick={() => this.excel()}>Generate</button>
+           {/* <Link to="http://localhost:8000/test/">
+            <button className="BlueButton" onClick={() => this.excel()}>Generate</button>
+          </Link>  */}
         </div>
       </div>
     );
