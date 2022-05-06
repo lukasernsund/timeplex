@@ -35,7 +35,9 @@ import { Link } from 'react-router-dom';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
 
-
+function byDate(a, b) {
+    return new Date(a.date).valueOf() - new Date(b.date).valueOf();
+}
 class Schedule extends React.Component{
     constructor(props) {
         super(props);
@@ -105,11 +107,15 @@ class Schedule extends React.Component{
   }
 
 
+
+
     renderItems = () => {
     const newItems = this.state.SchedulesList
-  
+        newItems.sort(byDate).reverse();
+
+
     return newItems.map((item) => (
-    <div className="listSchedule"> 
+    <div className="listSchedule">
       <li
         key={item.id}
         className="list-group-item d-flex justify-content-between align-items-center"
