@@ -270,12 +270,12 @@ class Create extends React.Component {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
+            <button href="http://localhost:8000/test" className="btn btn-primary justify-content-end generateButton" onClick={() => this.excel()}>Generate</button>
           </div>
           <div className="SearchMargin">{this.test()}</div>
         </div>
         <div className="WorkingList">{this.renderItems()}</div>
         <div className="GenerateButton">
-        <button href="http://localhost:8000/test" className="BlueButton" onClick={() => this.excel()}>Generate</button>
            {/* <Link to="http://localhost:8000/test/">
             <button className="BlueButton" onClick={() => this.excel()}>Generate</button>
           </Link>  */}

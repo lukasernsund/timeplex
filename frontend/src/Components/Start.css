@@ -21,13 +21,25 @@
 
 .AllButton{
     background-color: white;
-    color: #3F72AF;
+    color:#3F72AF;
 }
-
+.AllButton :hover{
+    background-color: #3F72AF;
+}
+.btn-outline-primary:hover {
+    background-color: #3F72AF;
+    border-color: #3F72AF;
+}
 .NewButton{
     background-color: #3F72AF;
-    color: white;
+    color: #3F72AF ;
 }
+
+/* .btn-primary:hover {
+    background-color: white;
+    border-color: #3F72AF;
+    color: #3F72AF;
+} */
 
 .StartImg{
     margin-top: 2em;
