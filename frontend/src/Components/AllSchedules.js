@@ -127,15 +127,15 @@ class Schedule extends React.Component{
         </Link>
 
         <span>
-          <button // EDIT BUTTON
+          {/* <button // EDIT BUTTON
             className="btn btn-secondary mr-2"
             onClick={() => this.editItem(item)}
           >
             Edit
-          </button>
+          </button> */}
           <button // Download BUTTON
             href="http://localhost:8000/test"
-            className="btn btn-success mr-2"
+            className="btn btn-primary mr-2"
             onClick={() => this.excel()}
           >
             Download
