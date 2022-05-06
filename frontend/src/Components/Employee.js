@@ -121,7 +121,7 @@ class Employee extends React.Component{
     render() {
         return(
         <div>
-            <button onClick={this.openPopup} className="ButtonEmployee">Add employee</button>
+            <button onClick={this.openPopup} className="ButtonEmployee btn btn-primary">Add employee</button>
             {this.state.modal ? (
           <Modal
             activeItem={this.state.activeItem}
