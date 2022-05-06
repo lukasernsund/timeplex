@@ -23,7 +23,7 @@ class Create extends React.Component {
 
     this.state = {
       workTimeList: [],
-  
+      newEmployeeWorking: [],
       worktimeEmployee: [],
       employeeWorking: [],
       GetWorktimeEmployee:[],
@@ -46,7 +46,7 @@ class Create extends React.Component {
   }
 
   saveItem = (item) => {
-    console.log("inne i save" + this.state.activeItem);
+    
     this.state.activeItem.employeeID = item.id;
     axios
       .post(
@@ -137,42 +137,25 @@ class Create extends React.Component {
       return
     }
     this.filterWorktimeEmployee(value)
-    console.log("vad är value?" + value)
+    
     const chosen_date=value.toISOString().split("T")[0]
     this.setState({activeItem: {date_schedule: chosen_date}})
     }
 
   filterWorktimeEmployee(value){
 
-  const chosen_date=value.toISOString().split("T")[0]
-
-  //axios 
-  //  .get("/api/employeeworktime/")
-  //  .then((res) => this.setState({GetWorktimeEmployee: res})
-  //  )
-  //  .catch((err) => console.log(err));
-    
-  //  console.log("detta är get work employee" + this.state.GetWorktimeEmployee[1])
-    
-    //this.state.worktimeEmployee.filter(this.state.worktimeEmployee => this.state.worktimeEmployee.date_schedule==value)
-    //console.log(test+"lyckades vi?")
-
-    console.log(this.state.allWorktimes[1].date_schedule + " detta är allworktimes")
-
+    const chosen_date=value.toISOString().split("T")[0]
     const allObjects = this.state.allWorktimes
-    const results = allObjects.filter(object => allObjects.date_schedule == chosen_date)
-    console.log("detta är result" + results)
-
-    //this.state.worktimeEmployee = this.state.allWorktimes.filter(this.state.worktimeEmployee => this.state.worktimeEmployee.date_schedule == chosen_date)
-    return
-  }
+    const allEmployees = this.state.workTimeList
+    this.setState({employeeWorking: allObjects.filter(function(object){return object.date_schedule == chosen_date})})
+    console.log(this.state.employeeWorking)
+  }  
   
-
   renderItems = () => {
-    const newItems = this.state.employeeWorking;
+    const newItems = this.state.newEmployeeWorking;
     return newItems.map((item) => (
       <div className="listEmployeeWorking">
-        <ul>
+        
           <li
             key={item.id}
             className="list-group-item d-flex justify-content-md-start align-items-center"
