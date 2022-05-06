@@ -23,6 +23,7 @@ class Create extends React.Component {
 
     this.state = {
       workTimeList: [],
+      
       newEmployeeWorking: [],
       worktimeEmployee: [],
       employeeWorking: [],
@@ -70,24 +71,22 @@ class Create extends React.Component {
     }
   };
 
-  
-  
-
   handleDelete = (item) => {
     this.setState({
-      employeeWorking: this.state.employeeWorking.filter(function (test) {
+      newEmployeeWorking: this.state.newEmployeeWorking.filter(function (test) {
         return test !== item;
       }),
-    });
+    })
+    
   };
 
   AddEmployee = (item) => {
 
-    if (this.state.employeeWorking.includes(item)) {
+    if (this.state.newEmployeeWorking.includes(item)) {
       return;
     }
     this.setState((prevState) => ({
-      employeeWorking: [item, ...prevState.employeeWorking],
+      newEmployeeWorking: [item, ...prevState.newEmployeeWorking],
     }));  
   };
 
@@ -137,22 +136,46 @@ class Create extends React.Component {
       return
     }
     this.filterWorktimeEmployee(value)
-    
     const chosen_date=value.toISOString().split("T")[0]
     this.setState({activeItem: {date_schedule: chosen_date}})
     }
 
   filterWorktimeEmployee(value){
-
+    this.setState({
+      newEmployeeWorking: this.state.newEmployeeWorking.filter(function (test) {
+        return test==null;
+    })})
+    
+    
     const chosen_date=value.toISOString().split("T")[0]
     const allObjects = this.state.allWorktimes
     const allEmployees = this.state.workTimeList
     this.setState({employeeWorking: allObjects.filter(function(object){return object.date_schedule == chosen_date})})
-    console.log(this.state.employeeWorking)
+    
+    const lengthEmployee=this.state.employeeWorking
+    console.log(lengthEmployee.length)
+    for(var i=0; i < lengthEmployee.length; i++){
+    
+      const index = this.state.employeeWorking[i].employeeID
+
+
+      const findEmployee = allEmployees.filter(function(object){return object.id == index})
+      console.log(" hur ser den ut?"+findEmployee[0])
+      if (this.state.newEmployeeWorking.includes(findEmployee[0])) {
+        return;
+      }
+      this.setState((prevState) => ({
+      newEmployeeWorking: [findEmployee[0], ...prevState.newEmployeeWorking],
+      })); 
+    console.log(" hur ser den u2 " + this.state.newEmployeeWorking)
+    }
+    
+    //this.setState({employeeWorking: allEmployees.filter(function(object){return object.id ===}) )
   }  
   
   renderItems = () => {
     const newItems = this.state.newEmployeeWorking;
+    console.log(newItems)
     return newItems.map((item) => (
       <div className="listEmployeeWorking">
         
@@ -225,7 +248,9 @@ class Create extends React.Component {
         </div>
     ));
   };
+
   render() {
+    console.log("render")
     if (this.state.activeItem.date_schedule==="") {
       var today = new Date()
       this.setState({activeItem:{date_schedule: today}}) 
