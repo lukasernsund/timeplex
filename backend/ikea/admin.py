@@ -10,7 +10,7 @@ class EmployeeAdmin(admin.ModelAdmin):
                   'operative_responsible', 'frontline', 'smalland_1', 'smalland_2', 'count_kk',)
 
 class WorktimeAdmin(admin.ModelAdmin):
-    list_display = ('employeeID','start_time', 'end_time')
+    list_display = ('employeeID','start_time', 'end_time', 'date_schedule')
 
 class AllSchedulesAdmin(admin.ModelAdmin):
     list_display = ('date','name')

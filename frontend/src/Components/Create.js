@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./Create.css";
 import "../App.css";
 import axios from "axios";
-
 import BasicDatePicker from "./Date";
 //import ComboBox from "./Search";
 import { Link } from "react-router-dom";
@@ -25,22 +24,26 @@ class Create extends React.Component {
     this.state = {
       modal: false,         //newly added
       workTimeList: [],
-      date: "",
+      newEmployeeWorking: [],
       worktimeEmployee: [],
       employeeWorking: [],
+      GetWorktimeEmployee:[],
+      start_time_employees:[],
+      end_time_employees:[],
       allWorktimes: [],
       objectList:[],
       activeItem: {
         employeeID: null,
-        start_time: "empty",
-        end_time: "empty",
+        start_time: "",
+        end_time: "",
+        date_schedule:"",
+    },
+      activeItem2:{          //newly added
+        employeeID: null,
+        start_time: "reg",
+        end_time: "erfref",
+        description : "other"
       },
-        activeItem2:{          //newly added
-          employeeID: null,
-          start_time: "reg",
-          end_time: "erfref",
-          description : "other"
-        },
 
     };
   }
@@ -60,14 +63,19 @@ class Create extends React.Component {
       .then((res) => this.refreshList());
   };
 
-  handleChange = (e) => {
+  handleChange = (e, ID) => {
     let { name, value } = e.target;
     //name = start_time & end_time, value = vald tid
     const activeItem = { ...this.state.activeItem, [name]: value };
     this.setState({ activeItem });
-    console.log("objects" + name + value )
+    console.log(this.state.activeItem)
+    if (name==="start_time"){
+      this.state.start_time_employees[ID]=value
+    }
+    else{
+      this.state.end_time_employees[ID]=value
     
-    
+    }
   };
 
   handleDelete = (item) => {
@@ -100,9 +108,6 @@ class Create extends React.Component {
       .catch((err) => console.log(err));
   };
 
-  testa = (itemID) =>{
-    
-  }
 
   test = () => {
     const newItems = this.state.workTimeList;
@@ -131,6 +136,24 @@ class Create extends React.Component {
       .then((res) => window.open(res.config.url))
   }
 
+  setDate (value){
+    if (value==null){
+      return
+    }
+    this.filterWorktimeEmployee(value)
+
+    const chosen_date=value.toISOString().split("T")[0]
+    this.setState({activeItem: {date_schedule: chosen_date}})
+    }
+
+  filterWorktimeEmployee(value){
+
+    const chosen_date=value.toISOString().split("T")[0]
+    const allObjects = this.state.allWorktimes
+    const allEmployees = this.state.workTimeList
+    this.setState({employeeWorking: allObjects.filter(function(object){return object.date_schedule == chosen_date})})
+    console.log(this.state.employeeWorking)
+  }
 
   editItem = (item) => {
     this.setState({ activeItem2: item, modal: !this.state.modal });
@@ -143,30 +166,32 @@ class Create extends React.Component {
   handleSubmit = (item) => {
     this.toggle();
 
-      console.log("inne i save" + this.state.activeItem2.employeeID);
-      this.state.activeItem2.employeeID = item.id;
-      axios
-          .post(
-              `http://localhost:8000/api/employeerequest/`,
-              this.state.activeItem2
-          )
-          .then((res) => this.refreshList());
-    }
-
+    console.log("inne i save" + this.state.activeItem2.employeeID);
+    this.state.activeItem2.employeeID = item.id;
+    axios
+        .post(
+            `http://localhost:8000/api/employeerequest/`,
+            this.state.activeItem2
+        )
+        .then((res) => this.refreshList());
+  }
 
 
   renderItems = () => {
-    const newItems = this.state.employeeWorking;
+    const newItems = this.state.newEmployeeWorking;
     return newItems.map((item) => (
-      <div>
-        <div className="listEmployee">
+      <div className="listEmployeeWorking">
+
           <li
             key={item.id}
-            className="list-group-item d-flex justify-content-between align-items-center"
+            className="list-group-item d-flex justify-content-md-start align-items-center"
           >
-        <span title={item.first_name}>
+        <span title={item.first_name} className="justify-content-start w-25">
           {item.first_name + " " + item.last_name}
         </span>
+            <span className="mr-5"></span>
+            <span className="mr-5"></span>
+
         <span title={item.employeeID}>
           {item.start_time}
           </span>
@@ -176,24 +201,31 @@ class Create extends React.Component {
                 id="employee-first_name"
                 name="start_time"
                 autoComplete="off"
-                
-                onChange={this.handleChange & this.testa(item.id)}
+                value={this.state.start_time_employees[item.id]}
+                onChange={(e) => {
+                  this.handleChange(e, item.id);
+               }}
                 placeholder="Enter first name"
               />
-            </span>
+           </span>
+            <span className="mr-3"></span>
             <span>
               <Input
                 type="time"
                 id="employee-first_name"
                 name="end_time"
                 autoComplete="off"
-                
-                onChange={this.handleChange}
+                value={this.state.end_time_employees[item.id]}
+                onChange={(e) => {
+                  this.handleChange(e, item.id);
+               }}
                 placeholder="Enter first name"
               />
             </span>
-            <span>
+            <span className="mr-5"></span>
+            <span className="mr-5"></span>
 
+            <span>
               <button
                 className="btn btn-warning mr-2"
                 onClick={() => this.editItem(this.state.activeItem)}
@@ -215,12 +247,15 @@ class Create extends React.Component {
               </button>
             </span>
           </li>
-
-        </div>
       </div>
     ));
   };
   render() {
+    if (this.state.activeItem.date_schedule==="") {
+      var today = new Date()
+      this.setState({activeItem:{date_schedule: today}})
+      };
+
     return (
       <div>
         <div>
@@ -228,10 +263,10 @@ class Create extends React.Component {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Date"
-                value={this.state.date}
-                onChange={(newValue) => {
-                  this.setState({ date: newValue.toISOString().split("T")[0] });
-                }}
+
+                value={this.state.activeItem.date_schedule}
+                onChange={(newValue) => {this.setDate(newValue)
+                  }}
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>

@@ -3,25 +3,30 @@
     margin-top: 3em;
     margin-left: 3em;
 }
+.DateMargin2{
+    margin-left: 3em;
+}
 .SearchMargin{
     margin-top: 2em;
+    margin-left: 3em;
 }
 .WorkingList{
     margin-top: 2em;
 }
-.listEmployee{
+.listEmployeeWorking{
     margin: 0%;
 }
-.listEmployee ul{
+.listEmployeeWorking ul{
     list-style-type: none;
 margin: 0%;
 
 }
-.listEmployee li{
+.listEmployeeWorking li{
 width: 70%;
 margin-top: 0%;
 
 }
+
 .BlueButton{
     background-color: #3F72AF;
     color: white;
@@ -39,5 +44,5 @@ margin-top: 0%;
 }
 .btn-primary {
     background: #3F72AF;
-    font-weight: bold;
+    border-color: #3F72AF;
 }
