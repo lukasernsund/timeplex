@@ -2,6 +2,7 @@ import '../App.css';
 import './Settings.css'
 import axios from 'axios';
 import React,{Component} from 'react';
+import Form from 'react-bootstrap/Form'
 
 class Settings extends Component {
 
@@ -65,8 +66,6 @@ class Settings extends Component {
     fileData = () => {
             return (
                 <div>
-                    <br />
-                    <h4>Choose before Pressing the Upload button</h4>
                 </div>
             );
         };

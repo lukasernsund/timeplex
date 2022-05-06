@@ -40,7 +40,7 @@ class Schedule extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            employeeList: [],
+            SchedulesList: [],
             modal: false,
             activeItem:{
                 date: "2022,11,10",
@@ -81,7 +81,7 @@ class Schedule extends React.Component{
         this.setState({modal:true})
         console.log("inne i openpupup")
         console.log(this.state.activeItem)
-        console.log(this.state.employeeList)
+        console.log(this.state.SchedulesList)
     }
 
     editItem = (item) => {
@@ -93,48 +93,50 @@ class Schedule extends React.Component{
       
         axios
       .get("/api/allschedules/")
-      .then((res) => this.setState({employeeList:res.data}))
+      .then((res) => this.setState({SchedulesList:res.data}))
       .catch((err) => console.log(err))
   };
 
+  excel = () => {
+    axios
+      .get('http://localhost:8000/test/') //Här borde Urln vara olika beroende på vilket scehma man klickar på.
+                                          //Jag vet inte hur man länkar detta men skriver upp på to-do /Simon
+      .then((res) => window.open(res.config.url))
+  }
 
 
     renderItems = () => {
-    const newItems = this.state.employeeList
-   
+    const newItems = this.state.SchedulesList
   
-    
     return newItems.map((item) => (
     <div className="listSchedule"> 
-      <Link
+      <li
+        key={item.id}
+        className="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <Link //Om man vill ha hela lådan som klickbar wrappar man hela <li> med denna <link>, men då blir knapparna också länkade till detta..
         to={"/Schedule/"+item.date}
         key={item.id}
-        className="list-group-item d-flex justify-content-between align-items-center text-muted"
->
-      
-      
-      {/* <li
-          key={item.id}
-
-        className="list-group-item d-flex justify-content-between align-items-center"
-
-      > */}
-        <span
-          title={item.first_name}
-        >
-          {"Date: "+item.date +" "+"Name: "+ item.name}
-        </span>
+        className="text-muted"
+      >
+          <span
+            title={item.first_name}
+          >
+            {"Date: "+item.date +" "+"Name: "+ item.name}
+          </span>
+        </Link>
 
         <span>
-          <button // EDIT BUTTON
+          {/* <button // EDIT BUTTON
             className="btn btn-secondary mr-2"
             onClick={() => this.editItem(item)}
           >
             Edit
-          </button>
+          </button> */}
           <button // Download BUTTON
-            className="btn btn-secondary mr-2"
-            onClick={() => this.editItem(item)}
+            href="http://localhost:8000/test"
+            className="btn btn-primary mr-2"
+            onClick={() => this.excel()}
           >
             Download
           </button>
@@ -146,8 +148,7 @@ class Schedule extends React.Component{
           </button>
           
         </span>
-      {/* </li> */}
-      </Link>
+      </li>
     </div>
     ));
   };

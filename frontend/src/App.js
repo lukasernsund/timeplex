@@ -1,7 +1,6 @@
 import './App.css';
 import Header from './Components/Header';
 import MainContent from "./Components/MainContent";
-import Footer from "./Components/Footer";
 
 import axios from "axios";
 import React, { Component } from 'react';
@@ -11,7 +10,6 @@ function App() {
     <div className="App">
         <Header />
         <MainContent />
-        <Footer />
     </div>
   );
 }
