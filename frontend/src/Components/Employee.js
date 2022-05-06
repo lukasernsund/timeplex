@@ -29,7 +29,6 @@ class Employee extends React.Component{
                 smaland_1:false,
                 smaland_2:false,
                 count_kk:false,
-
             }
         }
 

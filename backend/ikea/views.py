@@ -6,6 +6,8 @@ from .serializers import EmployeeSerializer
 from .serializers import WorktimeSerializer
 from .models import Employee
 from .models import EmployeeWorktime
+from .models import EmployeeRequest
+from .serializers import RequestSerializer
 from rest_framework.decorators import api_view
 import xlwt
 
@@ -63,5 +65,8 @@ class AllSchedulesView(viewsets.ModelViewSet):
     serializer_class = AllSchedulesSerializer
     queryset = AllSchedules.objects.all()
 
+class RequestView(viewsets.ModelViewSet):
+    serializer_class = RequestSerializer
+    queryset = EmployeeRequest.objects.all()
     
 

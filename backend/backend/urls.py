@@ -23,6 +23,7 @@ router = routers.DefaultRouter()
 router.register(r'employee', views.EmployeeView, 'ikea')
 router.register(r'employeeworktime', views.WorktimeView, 'ikea')
 router.register(r'allschedules', views.AllSchedulesView, 'ikea')
+router.register(r'employeerequest', views.RequestView, 'ikea')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import "./Create.css";
 import "../App.css";
 import axios from "axios";
+
 import BasicDatePicker from "./Date";
 //import ComboBox from "./Search";
 import { Link } from "react-router-dom";
-import Modal from "./Modal";
+import ModalTime from "./ModalTime";
 import { Input } from "reactstrap";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
@@ -22,6 +23,7 @@ class Create extends React.Component {
     super(props);
 
     this.state = {
+      modal: false,         //newly added
       workTimeList: [],
       date: "",
       worktimeEmployee: [],
@@ -29,10 +31,16 @@ class Create extends React.Component {
       allWorktimes: [],
       objectList:[],
       activeItem: {
-        employeeID: 10,
+        employeeID: null,
         start_time: "empty",
         end_time: "empty",
-    },
+      },
+        activeItem2:{          //newly added
+          employeeID: null,
+          start_time: "reg",
+          end_time: "erfref",
+          description : "other"
+        },
 
     };
   }
@@ -123,6 +131,30 @@ class Create extends React.Component {
       .then((res) => window.open(res.config.url))
   }
 
+
+  editItem = (item) => {
+    this.setState({ activeItem2: item, modal: !this.state.modal });
+  };
+
+  toggle = () => {
+    this.setState({ modal: !this.state.modal });
+  };
+
+  handleSubmit = (item) => {
+    this.toggle();
+
+      console.log("inne i save" + this.state.activeItem2.employeeID);
+      this.state.activeItem2.employeeID = item.id;
+      axios
+          .post(
+              `http://localhost:8000/api/employeerequest/`,
+              this.state.activeItem2
+          )
+          .then((res) => this.refreshList());
+    }
+
+
+
   renderItems = () => {
     const newItems = this.state.employeeWorking;
     return newItems.map((item) => (
@@ -161,9 +193,10 @@ class Create extends React.Component {
               />
             </span>
             <span>
+
               <button
                 className="btn btn-warning mr-2"
-                onClick={() => this.editItem(item)}
+                onClick={() => this.editItem(this.state.activeItem)}
               >
                 Request
               </button>
@@ -182,7 +215,7 @@ class Create extends React.Component {
               </button>
             </span>
           </li>
-          </ul>
+
         </div>
       </div>
     ));
@@ -212,6 +245,13 @@ class Create extends React.Component {
             <button className="BlueButton" onClick={() => this.excel()}>Generate</button>
           </Link>  */}
         </div>
+        {this.state.modal ? (
+            <ModalTime
+                activeItem2={this.state.activeItem2}
+                toggle={this.toggle}
+                onSave={this.handleSubmit}
+            />
+        ) : null}
       </div>
     );
   }
