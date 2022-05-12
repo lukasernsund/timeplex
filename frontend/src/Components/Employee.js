@@ -74,7 +74,7 @@ class Employee extends React.Component{
 
       
         axios
-      .get("/api/employee/")
+      .get("http://localhost:8000/api/employee/")
       .then((res) => this.setState({employeeList:res.data}))
       .catch((err) => console.log(err))
   };

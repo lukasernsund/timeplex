@@ -27,5 +27,5 @@ router.register(r'allschedules', views.AllSchedulesView, 'ikea')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('test/', export_users_xls)
+    path('download/', export_users_xls)
 ]
