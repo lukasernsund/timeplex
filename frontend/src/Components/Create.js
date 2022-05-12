@@ -93,12 +93,12 @@ class Create extends React.Component {
 
   refreshList = () => {
     axios
-      .get("/api/employeeworktime/")
+      .get("http://localhost:8000/api/employeeworktime/")
       .then((res) => this.setState({ allWorktimes: res.data }))
       .catch((err) => console.log(err));
 
     axios
-      .get("/api/employee/")
+      .get("http://localhost:8000/api/employee/")
       .then((res) => this.setState({ workTimeList: res.data }))
       .catch((err) => console.log(err));
   };
@@ -128,7 +128,7 @@ class Create extends React.Component {
 
   excel = () => {
     axios
-      .get('http://localhost:8000/test/')
+      .get('http://localhost:8000/download/')
       .then((res) => window.open(res.config.url))
   }
 
@@ -152,7 +152,7 @@ class Create extends React.Component {
   }  
   
   renderItems = () => {
-    const newItems = this.state.newEmployeeWorking;
+    const newItems = this.state.employeeWorking;
     return newItems.map((item) => (
       <div className="listEmployeeWorking">
         
@@ -245,7 +245,7 @@ class Create extends React.Component {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
-            <button href="http://localhost:8000/test" className="btn btn-primary justify-content-end generateButton" onClick={() => this.excel()}>Generate</button>
+            <button href="http://localhost:8000/download" className="btn btn-primary justify-content-end generateButton" onClick={() => this.excel()}>Generate</button>
           </div>
           <div className="SearchMargin">{this.test()}</div>
         </div>
