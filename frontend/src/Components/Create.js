@@ -33,7 +33,7 @@ class Create extends React.Component {
       allWorktimes: [],
       objectList:[],
       activeItem: {
-        employeeID: null,
+        employeeID: 1,
         start_time: "",
         end_time: "",
         date_schedule:"",
@@ -46,19 +46,10 @@ class Create extends React.Component {
     this.refreshList();
   }
 
-  saveItem = (item) => {
-    
-    this.state.activeItem.employeeID = item.id;
-    axios
-      .post(
-        `http://localhost:8000/api/employeeworktime/`,
-        this.state.activeItem
-      )
-      .then((res) => this.refreshList());
-  };
-
   handleChange = (e, ID) => {
+    
     let { name, value } = e.target;
+    console.log(value+"värde");
     const activeItem = { ...this.state.activeItem, [name]: value };
     this.setState({ activeItem });
     console.log(this.state.activeItem)
@@ -69,11 +60,12 @@ class Create extends React.Component {
       this.state.end_time_employees[ID]=value
     
     }
+    console.log(this.state.start_time_employees[ID]+"hur ser denna tid ut?");
   };
 
   handleDelete = (item) => {
     this.setState({
-      newEmployeeWorking: this.state.newEmployeeWorking.filter(function (test) {
+      employeeWorking: this.state.employeeWorking.filter(function (test) {
         return test !== item;
       }),
     })
@@ -82,11 +74,15 @@ class Create extends React.Component {
 
   AddEmployee = (item) => {
 
-    if (this.state.newEmployeeWorking.includes(item)) {
+    if (this.state.employeeWorking.includes(item)) {
       return;
     }
+
+    this.state.start_time_employees[item.id]="12:00"
+    this.state.end_time_employees[item.id]="12:00"
+    console.log(this.state.start_time_employees[item.id]+"värdet på tid?" + item.id)
     this.setState((prevState) => ({
-      newEmployeeWorking: [item, ...prevState.newEmployeeWorking],
+      employeeWorking: [item, ...prevState.employeeWorking],
     }));  
   };
 
@@ -126,56 +122,87 @@ class Create extends React.Component {
   };
 
   excel = () => {
+    this.updateDatabase()
     axios
       .get('http://localhost:8000/test/')
       .then((res) => window.open(res.config.url))
+  }
+
+  updateDatabase = () => {
+    const todayEmployees = this.state.employeeWorking
+    const date = this.state.activeItem.date_schedule
+    const deletingDoubles= this.state.allWorktimes.filter(function (test) {
+      return test.date_schedule == date;
+    })
+    for (let i = 0; i < deletingDoubles.length; i++){
+    axios
+      .delete(`http://localhost:8000/api/employeeworktime/${deletingDoubles[i].id}/`)
+      .then((res) => this.refreshList());
+    }
+   
+
+    for (let i = 0; i < todayEmployees.length; i++){
+      
+      const ID = todayEmployees[i].id
+      const startTime = this.state.start_time_employees[ID]
+      const endTime = this.state.end_time_employees[ID]
+      
+      this.state.activeItem.start_time = startTime;
+      this.state.activeItem.end_time = endTime;
+      this.state.activeItem.employeeID = ID;
+
+      axios
+        .post(`http://localhost:8000/api/employeeworktime/`,
+        this.state.activeItem
+      )
+      .then((res) => this.refreshList());
+      
+    }
   }
 
   setDate (value){
     if (value==null){
       return
     }
-    this.filterWorktimeEmployee(value)
     const chosen_date=value.toISOString().split("T")[0]
     this.setState({activeItem: {date_schedule: chosen_date}})
     }
 
-  filterWorktimeEmployee(value){
-    this.setState({
-      newEmployeeWorking: this.state.newEmployeeWorking.filter(function (test) {
-        return test==null;
-    })})
+  // filterWorktimeEmployee(value){
+  //   this.setState({
+  //     newEmployeeWorking: this.state.newEmployeeWorking.filter(function (test) {
+  //       return test==null;
+  //   })})
     
     
-    const chosen_date=value.toISOString().split("T")[0]
-    const allObjects = this.state.allWorktimes
-    const allEmployees = this.state.workTimeList
-    this.setState({employeeWorking: allObjects.filter(function(object){return object.date_schedule == chosen_date})})
+  //   const chosen_date=value.toISOString().split("T")[0]
+  //   const allObjects = this.state.allWorktimes
+  //   const allEmployees = this.state.workTimeList
+  //   this.setState({employeeWorking: allObjects.filter(function(object){return object.date_schedule == chosen_date})})
     
-    const lengthEmployee=this.state.employeeWorking
-    console.log(lengthEmployee.length)
-    for(var i=0; i < lengthEmployee.length; i++){
+  //   const lengthEmployee=this.state.employeeWorking
+  //   console.log(lengthEmployee.length)
+  //   for(var i=0; i < lengthEmployee.length; i++){
     
-      const index = this.state.employeeWorking[i].employeeID
+  //     const index = this.state.employeeWorking[i].employeeID
 
 
-      const findEmployee = allEmployees.filter(function(object){return object.id == index})
-      console.log(" hur ser den ut?"+findEmployee[0])
-      if (this.state.newEmployeeWorking.includes(findEmployee[0])) {
-        return;
-      }
-      this.setState((prevState) => ({
-      newEmployeeWorking: [findEmployee[0], ...prevState.newEmployeeWorking],
-      })); 
-    console.log(" hur ser den u2 " + this.state.newEmployeeWorking)
-    }
+  //     const findEmployee = allEmployees.filter(function(object){return object.id == index})
+  //     console.log(" hur ser den ut?"+findEmployee[0])
+  //     if (this.state.newEmployeeWorking.includes(findEmployee[0])) {
+  //       return;
+  //     }
+  //     this.setState((prevState) => ({
+  //     newEmployeeWorking: [findEmployee[0], ...prevState.newEmployeeWorking],
+  //     })); 
+  //   console.log(" hur ser den u2 " + this.state.newEmployeeWorking)
+  //   }
     
-    //this.setState({employeeWorking: allEmployees.filter(function(object){return object.id ===}) )
-  }  
+  //   //this.setState({employeeWorking: allEmployees.filter(function(object){return object.id ===}) )
+  // }  
   
   renderItems = () => {
-    const newItems = this.state.newEmployeeWorking;
-    console.log(newItems)
+    const newItems = this.state.employeeWorking;
     return newItems.map((item) => (
       <div className="listEmployeeWorking">
         
@@ -196,6 +223,7 @@ class Create extends React.Component {
               <Input
                 type="time"
                 id="employee-first_name"
+  
                 name="start_time"
                 autoComplete="off"
                 value={this.state.start_time_employees[item.id]}
@@ -210,6 +238,7 @@ class Create extends React.Component {
               <Input
                 type="time"
                 id="employee-first_name"
+    
                 name="end_time"
                 autoComplete="off"
                 value={this.state.end_time_employees[item.id]}
@@ -236,12 +265,7 @@ class Create extends React.Component {
                 Delete
               </button>
 
-              <button
-                className="btn btn-success mr-2"
-                onClick={() => this.saveItem(item)}
-              >
-                Save
-              </button>
+              
             </span>
           </li>
          
@@ -250,12 +274,12 @@ class Create extends React.Component {
   };
 
   render() {
-    console.log("render")
     if (this.state.activeItem.date_schedule==="") {
       var today = new Date()
-      this.setState({activeItem:{date_schedule: today}}) 
-      };
       
+      this.setState({activeItem:{date_schedule: today.toISOString().split("T")[0]}}) 
+      };
+
     return (
       <div>
         <div>
@@ -270,15 +294,15 @@ class Create extends React.Component {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
+            <Link to={"/Schedule/"+this.state.activeItem.date_schedule}>
             <button href="http://localhost:8000/test" className="btn btn-primary justify-content-end generateButton" onClick={() => this.excel()}>Generate</button>
+          </Link>
+          
           </div>
           <div className="SearchMargin">{this.test()}</div>
         </div>
         <div className="WorkingList">{this.renderItems()}</div>
         <div className="GenerateButton">
-           {/* <Link to="http://localhost:8000/test/">
-            <button className="BlueButton" onClick={() => this.excel()}>Generate</button>
-          </Link>  */}
         </div>
       </div>
     );
