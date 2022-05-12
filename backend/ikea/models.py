@@ -33,8 +33,9 @@ class Employee(models.Model):
 
 
 class AllSchedules(models.Model):
-    date = models.DateField()
+    date = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
+    # models.FileField(upload_to=None, max_length=254)
 
     def _str_(self):
         return self.date

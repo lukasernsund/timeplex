@@ -20,15 +20,15 @@ from django.contrib.auth.models import User
 # Create your views here.
 
 @api_view(['GET'])
-def export_users_xls(request):
+def export_users_xls(request,date):
     print("Inne i funktion")
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
-
+    
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Users')
-
-
+    print("datum", date)
+    
     # Sheet header, first row
     row_num = 0
 
@@ -44,7 +44,7 @@ def export_users_xls(request):
     font_style = xlwt.XFStyle()
 
     # Tar fram en lista med alla employeeID som jobbar ett visst datum som heter employeeIdList
-    employee_id_var = EmployeeWorktime.objects.filter(date_schedule = "2022-05-13").values_list('employeeID')
+    employee_id_var = EmployeeWorktime.objects.filter(date_schedule = date).values_list('employeeID')
     employeeIdList=[]
     for index in employee_id_var:
         index= index[0]
@@ -60,13 +60,13 @@ def export_users_xls(request):
     print("nameList", nameList)
 
     # Skapar en lista med object som innehåller ID, startTid och slutTid
-    dateRows = EmployeeWorktime.objects.filter(date_schedule = "2022-05-13").values_list("employeeID","start_time", "end_time")
+    dateRows = EmployeeWorktime.objects.filter(date_schedule = date).values_list("employeeID","start_time", "end_time")
     # print("Filtrerad lista:", dateRows)
 
     counter = 0
     for row in dateRows:
         row_num += 1
-        for col_num in range(len(row)):
+        for col_num in range(len(row)-1):
             if col_num == 0:
                 ws.write(row_num, col_num, nameList[counter][0], font_style)
                 counter += 1
