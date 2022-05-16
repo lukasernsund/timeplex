@@ -22,7 +22,8 @@ class Create extends React.Component {
     super(props);
 
     this.state = {
-      modal: false,         //newly added
+      modal: false,
+      deletable: false,
       workTimeList: [],
       allSchedules: [],
       worktimeEmployee: [],
@@ -30,7 +31,11 @@ class Create extends React.Component {
       GetWorktimeEmployee: [],
       start_time_employees: [],
       end_time_employees: [],
+      startTimeRequest: [],
+      endTimeRequest: [],
+      descriptionRequest: [],
       allWorktimes: [],
+      allRequest : [],
       activeSchedule:{
         date:"",
         name:"testing"
@@ -43,9 +48,9 @@ class Create extends React.Component {
       },
       activeItem2: {          //newly added
         employeeID: null,
-        start_time: "reg",
-        end_time: "erfref",
-        description: "other",
+        start_time: "",
+        end_time: "",
+        description: "",
         date_schedule: ""
       },
     };
@@ -70,6 +75,16 @@ class Create extends React.Component {
       .get("http://localhost:8000/api/employee/")
       .then((res) => this.setState({ workTimeList: res.data }))
       .catch((err) => console.log(err));
+
+    axios
+        .get("http://localhost:8000/api/employeerequest/")
+        .then((res) => this.setState({ allRequest: res.data }))
+        .catch((err) => console.log(err));
+  };
+
+  toggle = () => {
+    this.setState({ modal: !this.state.modal });
+
   };
 
   handleChange = (e, ID) => {
@@ -117,7 +132,7 @@ class Create extends React.Component {
     if (this.state.activeItem.date_schedule==="") {
       var today = new Date()
 
-    this.state.activeItem.date_schedule = today
+    this.state.activeItem.date_schedule = today.toISOString().split("T")[0]
     }
     console.log(this.state.activeItem.date_schedule);
     this.updateDatabase()
@@ -152,10 +167,18 @@ class Create extends React.Component {
     const deletingDoubles= this.state.allWorktimes.filter(function (test) {
       return test.date_schedule == date;
     })
+    const deletingDoubleRequests= this.state.allRequest.filter(function (test) {
+      return test.date_schedule == date;
+    })
     for (let i = 0; i < deletingDoubles.length; i++){
     axios
       .delete(`http://localhost:8000/api/employeeworktime/${deletingDoubles[i].id}/`)
       .then((res) => this.refreshList());
+    }
+    for (let i = 0; i < deletingDoubleRequests.length; i++){
+      axios
+          .delete(`http://localhost:8000/api/employeerequest/${deletingDoubleRequests[i].id}/`)
+          .then((res) => this.refreshList());
     }
 
     for (let i = 0; i < todayEmployees.length; i++){
@@ -173,7 +196,23 @@ class Create extends React.Component {
         this.state.activeItem
       )
       .then((res) => this.refreshList());
+      if (this.state.startTimeRequest[ID] !== undefined || this.state.startTimeRequest[ID] !== "") {
+        const startTimeRequest = this.state.startTimeRequest[ID]
 
+        const endTimeRequest = this.state.endTimeRequest[ID]
+        const description = this.state.descriptionRequest[ID]
+
+        this.state.activeItem2.start_time = startTimeRequest;
+        this.state.activeItem2.end_time = endTimeRequest;
+        this.state.activeItem2.description = description;
+        this.state.activeItem2.employeeID = ID;
+        this.state.activeItem2.date_schedule = date;
+        axios
+            .post(`http://localhost:8000/api/employeerequest/`,
+                this.state.activeItem2
+            )
+            .then((res) => this.refreshList());
+      }
     }
   }
 
@@ -185,13 +224,36 @@ class Create extends React.Component {
     this.setState({activeItem: {date_schedule: chosen_date}})
     }
 
-    request = (item) => {
-        console.log("nu kommer item")
-        console.log(item)
-        console.log("nu kommer emloyeeID")
-        console.log(item.id)
-        this.setState({ activeItem2: item, modal: !this.state.modal });
+    request = (id) => {
+        console.log("nu kommer id")
+        console.log(id)
+        this.state.activeItem2.employeeID = id;
+
+      if(this.state.startTimeRequest[id]!== undefined) {
+        this.state.deletable = true;
+        this.state.activeItem2.start_time = this.state.startTimeRequest[id]
+        this.state.activeItem2.end_time = this.state.endTimeRequest[id]
+        this.state.activeItem2.description = this.state.descriptionRequest[id]
+      }else {
+        this.state.activeItem2.start_time = "";
+        this.state.activeItem2.end_time = "";
+        this.state.activeItem2.description = "";
+      }
+      if (this.state.startTimeRequest[id]=== "") {
+        console.log("inne")
+        this.state.deletable = false;
+      }
+      this.setState({modal: !this.state.modal});
     };
+
+  handleSubmit = (item) => {
+    this.toggle();
+    console.log(item)
+    this.state.startTimeRequest[item.employeeID] = item.start_time;
+    this.state.endTimeRequest[item.employeeID] = item.end_time;
+    this.state.descriptionRequest[item.employeeID] = item.description;
+    console.log( this.state.startTimeRequest[item.employeeID])
+  }
 
 
   autoComplete = () => {
@@ -269,7 +331,7 @@ class Create extends React.Component {
             <span>
               <button
                 className="btn btn-warning mr-2"
-                onClick={() => this.request(this.state.activeItem2, item.id)}
+                onClick={() => this.request(item.id)}
               >
                 Request
               </button>
@@ -323,6 +385,7 @@ class Create extends React.Component {
         {this.state.modal ? (
             <ModalTime
                 activeItem2={this.state.activeItem2}
+                deletable={this.state.deletable}
                 toggle={this.toggle}
                 onSave={this.handleSubmit}
             />
