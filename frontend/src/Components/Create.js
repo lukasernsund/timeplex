@@ -33,7 +33,7 @@ class Create extends React.Component {
       objectList:[],
       activeSchedule:{
         date:"",
-        name:"sdf"
+        name:"testing"
       },
       activeItem: {
         employeeID: 1,
@@ -120,14 +120,15 @@ class Create extends React.Component {
       .get(`http://localhost:8000/download/${this.state.activeItem.date_schedule}/`)
       .then((res) => window.open(res.config.url))
   
-
-    if(existingSchedules.length){
+    if (existingSchedules.length) {
+      console.log("eller är vi i if sats?");
       console.log(existingSchedules[0])
       axios
       .put(`http://localhost:8000/api/allschedules/${existingSchedules[0].id}`,existingSchedules[0])
       .then((res) =>this.refreshList())
     }
-    else{
+    else {
+      console.log("funkar det?")
       axios
       .post('http://localhost:8000/api/allschedules/',this.state.activeSchedule)
       .then((res) =>this.refreshList())
@@ -293,7 +294,7 @@ class Create extends React.Component {
               />
             </LocalizationProvider>
             <Link to={"/Schedule/"+this.state.activeItem.date_schedule}>
-            <button href="http://localhost:8000/download" className="btn btn-primary justify-content-end generateButton" onClick={() => this.excel()}>Generate</button>
+            <button className="btn btn-primary justify-content-end generateButton" onClick={() => this.excel()}>Generate</button>
           </Link>
 
           </div>

@@ -91,18 +91,15 @@ class Schedule extends React.Component{
      };
 
     refreshList =()=> {
-
-      
         axios
       .get("/api/allschedules/")
       .then((res) => this.setState({SchedulesList:res.data}))
       .catch((err) => console.log(err))
   };
 
-  excel = () => {
+  excel = (item) => {
     axios
-      .get('http://localhost:8000/test/') //Här borde Urln vara olika beroende på vilket scehma man klickar på.
-                                          //Jag vet inte hur man länkar detta men skriver upp på to-do /Simon
+      .get(`http://localhost:8000/download/${item.date}/`)
       .then((res) => window.open(res.config.url))
   }
 
@@ -142,7 +139,7 @@ class Schedule extends React.Component{
           <button // Download BUTTON
             href="http://localhost:8000/test"
             className="btn btn-primary mr-2"
-            onClick={() => this.excel()}
+            onClick={() => this.excel(item)}
           >
             Download
           </button>
