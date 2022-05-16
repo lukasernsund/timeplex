@@ -21,7 +21,8 @@ from django.contrib.auth.models import User
 # Create your views here.
 
 @api_view(['GET'])
-def export_users_xls(request):
+def export_users_xls(request, date):
+    print("Inne i funktion")
     time.sleep(0.1)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
