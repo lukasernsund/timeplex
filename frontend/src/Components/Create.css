@@ -37,10 +37,11 @@ margin-top: 0%;
     border: 0.2em solid #3F72AF;
     font-weight: 600;
 }
-.GenerateButton{
-    position: absolute;
-    right: 7em;
-    bottom: 7em;
+.generateButton{
+    float: right;
+    margin-right: 3em;
+    height: 3.5em;
+    width: 10em;
 }
 .btn-primary {
     background: #3F72AF;

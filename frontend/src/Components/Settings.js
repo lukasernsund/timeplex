@@ -75,13 +75,13 @@ class Settings extends Component {
             <div>
                 <div>
                     <input type="file" onChange={this.onFileChangeBEHOV} />
-                    <button className="ButtonBehov" onClick={this.onFileUploadBEHOV}>
+                    <button className="btn btn-primary mt-5 mb-5 mr-5 ml-5 w-25" onClick={this.onFileUploadBEHOV}>
                         Upload Behovsschema .xls
                     </button>
                 </div>
                 <div>
                     <input type="file" onChange={this.onFileChangeTYPDAG} />
-                    <button className="ButtonTyp" onClick={this.onFileUploadTYPDAG}>
+                    <button className="btn btn-primary mt-5 mb-5 mr-5 ml-5 w-25" onClick={this.onFileUploadTYPDAG}>
                         Upload Typdagar .xls
                     </button>
                 </div>

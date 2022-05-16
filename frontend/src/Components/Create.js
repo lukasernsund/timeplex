@@ -24,16 +24,19 @@ class Create extends React.Component {
     this.state = {
       modal: false,         //newly added
       workTimeList: [],
-      newEmployeeWorking: [],
+      allSchedules: [],
       worktimeEmployee: [],
       employeeWorking: [],
       GetWorktimeEmployee: [],
       start_time_employees: [],
       end_time_employees: [],
       allWorktimes: [],
-      objectList: [],
+      activeSchedule:{
+        date:"",
+        name:"testing"
+      },
       activeItem: {
-        employeeID: null,
+        employeeID: 1,
         start_time: "",
         end_time: "",
         date_schedule: "",
@@ -46,30 +49,32 @@ class Create extends React.Component {
         date_schedule: ""
       },
     };
-    //const current = new Date();
-    //const date = `${current.getDate()}-${current.getMonth() + 1}-${current.getFullYear()}`;
-    //this.state.activeItem.date_schedule = date;
   }
 
   componentDidMount() {
     this.refreshList();
   }
 
-  saveItem = (item) => {
-    console.log("inne i save" + this.state.activeItem);
-    this.state.activeItem.employeeID = item.id;
-    console.log(this.state.activeItem.employeeID)
+  refreshList = () => {
     axios
-      .post(
-        `http://localhost:8000/api/employeeworktime/`,
-        this.state.activeItem
-      )
-      .then((res) => this.refreshList());
+      .get("http://localhost:8000/api/employeeworktime/")
+      .then((res) => this.setState({ allWorktimes: res.data }))
+      .catch((err) => console.log(err));
+
+      axios
+      .get("http://localhost:8000/api/allschedules/")
+      .then((res) => this.setState({ allSchedules: res.data }))
+      .catch((err) => console.log(err));
+
+    axios
+      .get("http://localhost:8000/api/employee/")
+      .then((res) => this.setState({ workTimeList: res.data }))
+      .catch((err) => console.log(err));
   };
 
   handleChange = (e, ID) => {
+
     let { name, value } = e.target;
-    //name = start_time & end_time, value = vald tid
     const activeItem = { ...this.state.activeItem, [name]: value };
     this.setState({ activeItem });
     console.log(this.state.activeItem)
@@ -82,38 +87,114 @@ class Create extends React.Component {
     }
   };
 
+  
+  
+
   handleDelete = (item) => {
     this.setState({
       employeeWorking: this.state.employeeWorking.filter(function (test) {
         return test !== item;
       }),
-    });
+    })
+
   };
 
   AddEmployee = (item) => {
 
-    if (this.state.newEmployeeWorking.includes(item)) {
+    if (this.state.employeeWorking.includes(item)) {
       return;
     }
+
+    this.state.start_time_employees[item.id]="12:00"
+    this.state.end_time_employees[item.id]="12:00"
+    console.log(this.state.start_time_employees[item.id]+"värdet på tid?" + item.id)
     this.setState((prevState) => ({
-      newEmployeeWorking: [item, ...prevState.newEmployeeWorking],
+      employeeWorking: [item, ...prevState.employeeWorking],
     }));  
   };
 
-  refreshList = () => {
-    axios
-      .get("/api/employeeworktime/")
-      .then((res) => this.setState({ allWorktimes: res.data }))
-      .catch((err) => console.log(err));
+  excel = () => {
+    if (this.state.activeItem.date_schedule==="") {
+      var today = new Date()
+
+    this.state.activeItem.date_schedule = today
+    }
+    console.log(this.state.activeItem.date_schedule);
+    this.updateDatabase()
+    const date = this.state.activeItem.date_schedule
+    this.state.activeSchedule.date=date
+    let existingSchedules = this.state.allSchedules.filter(function(individualSchedule){ return date==individualSchedule.date })
 
     axios
-      .get("/api/employee/")
-      .then((res) => this.setState({ workTimeList: res.data }))
-      .catch((err) => console.log(err));
-  };
+      .get(`http://localhost:8000/download/${this.state.activeItem.date_schedule}/`)
+      .then((res) => window.open(res.config.url))
+
+    if (existingSchedules.length) {
+      console.log("eller är vi i if sats?");
+      console.log(existingSchedules[0])
+      axios
+      .put(`http://localhost:8000/api/allschedules/${existingSchedules[0].id}`,existingSchedules[0])
+      .then((res) =>this.refreshList())
+    }
+    else {
+      console.log("funkar det?")
+      axios
+      .post('http://localhost:8000/api/allschedules/',this.state.activeSchedule)
+      .then((res) =>this.refreshList())
+    }
 
 
-  test = () => {
+}
+
+  updateDatabase = () => {
+    const todayEmployees = this.state.employeeWorking
+    const date = this.state.activeItem.date_schedule
+    const deletingDoubles= this.state.allWorktimes.filter(function (test) {
+      return test.date_schedule == date;
+    })
+    for (let i = 0; i < deletingDoubles.length; i++){
+    axios
+      .delete(`http://localhost:8000/api/employeeworktime/${deletingDoubles[i].id}/`)
+      .then((res) => this.refreshList());
+    }
+
+    for (let i = 0; i < todayEmployees.length; i++){
+
+      const ID = todayEmployees[i].id
+      const startTime = this.state.start_time_employees[ID]
+      const endTime = this.state.end_time_employees[ID]
+
+      this.state.activeItem.start_time = startTime;
+      this.state.activeItem.end_time = endTime;
+      this.state.activeItem.employeeID = ID;
+
+      axios
+        .post(`http://localhost:8000/api/employeeworktime/`,
+        this.state.activeItem
+      )
+      .then((res) => this.refreshList());
+
+    }
+  }
+
+  setDate (value){
+    if (value==null){
+      return
+    }
+    const chosen_date=value.toISOString().split("T")[0]
+    this.setState({activeItem: {date_schedule: chosen_date}})
+    }
+
+    request = (item) => {
+        console.log("nu kommer item")
+        console.log(item)
+        console.log("nu kommer emloyeeID")
+        console.log(item.id)
+        this.setState({ activeItem2: item, modal: !this.state.modal });
+    };
+
+
+  autoComplete = () => {
     const newItems = this.state.workTimeList;
     return (
       <div>
@@ -134,62 +215,13 @@ class Create extends React.Component {
       </div>
     );
   };
-  excel = () => {
-    axios
-      .get('http://localhost:8000/test/')
-      .then((res) => window.open(res.config.url))
-  }
-
-  setDate (value){
-    if (value==null){
-      return
-    }
-    this.filterWorktimeEmployee(value)
-
-    const chosen_date=value.toISOString().split("T")[0]
-    this.setState({activeItem: {date_schedule: chosen_date}})
-    }
-
-  filterWorktimeEmployee(value){
-
-    const chosen_date=value.toISOString().split("T")[0]
-    const allObjects = this.state.allWorktimes
-    const allEmployees = this.state.workTimeList
-    this.setState({employeeWorking: allObjects.filter(function(object){return object.date_schedule == chosen_date})})
-    console.log(this.state.employeeWorking)
-  }
-
-  request = (item) => {
-    console.log("nu kommer item")
-    console.log(item)
-    console.log("nu kommer emloyeeID")
-    console.log(item.id)
-    this.setState({ activeItem2: item, modal: !this.state.modal });
-  };
-
-  toggle = () => {
-    this.setState({ modal: !this.state.modal });
-  };
-
-  handleSubmit = (item) => {
-    this.state.activeItem2.employeeID = item.employeeID;
-    console.log("handle submit")
-    console.log( this.state.activeItem2.employeeID)
-    this.toggle();
-    axios
-        .post(
-            `http://localhost:8000/api/employeerequest/`,
-            item
-        )
-        .then((res) => this.refreshList());
-  }
 
 
   renderItems = () => {
-    const newItems = this.state.newEmployeeWorking;
+    const newItems = this.state.employeeWorking;
     return newItems.map((item) => (
       <div className="listEmployeeWorking">
-
+        
           <li
             key={item.id}
             className="list-group-item d-flex justify-content-md-start align-items-center"
@@ -206,7 +238,8 @@ class Create extends React.Component {
         <span>
               <Input
                 type="time"
-                id="employee-first_name"
+                id="employee-start-time"
+
                 name="start_time"
                 autoComplete="off"
                 value={this.state.start_time_employees[item.id]}
@@ -220,7 +253,7 @@ class Create extends React.Component {
             <span>
               <Input
                 type="time"
-                id="employee-first_name"
+                id="employee-end-time"
                 name="end_time"
                 autoComplete="off"
                 value={this.state.end_time_employees[item.id]}
@@ -247,22 +280,20 @@ class Create extends React.Component {
                 Delete
               </button>
 
-              <button
-                className="btn btn-success mr-2"
-                onClick={() => this.saveItem(item)}
-              >
-                Save
-              </button>
+
             </span>
           </li>
-      </div>
+         
+        </div>
     ));
   };
+
   render() {
-    if (this.state.activeItem.date_schedule==="") {
-      var today = new Date().toISOString().split("T")[0];
-      this.setState({activeItem:{date_schedule: today}})
-      };
+    // if (this.state.activeItem.date_schedule==="") {
+    //   var today = new Date()
+
+    //   this.setState({activeItem:{date_schedule: today.toISOString().split("T")[0]}})
+    //   };
 
     return (
       <div>
@@ -271,22 +302,23 @@ class Create extends React.Component {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Date"
-
+                onChangeRaw={(e) => console.log("vad händer")}
                 value={this.state.activeItem.date_schedule}
                 onChange={(newValue) => {this.setDate(newValue)
                   }}
                 renderInput={(params) => <TextField {...params} />}
+
               />
             </LocalizationProvider>
+            <Link to={"/Schedule/"+this.state.activeItem.date_schedule}>
+            <button className="btn btn-primary justify-content-end generateButton" onClick={() => this.excel()}>Generate</button>
+          </Link>
+
           </div>
-          <div className="SearchMargin">{this.test()}</div>
+          <div className="SearchMargin">{this.autoComplete()}</div>
         </div>
         <div className="WorkingList">{this.renderItems()}</div>
         <div className="GenerateButton">
-        <button href="http://localhost:8000/test" className="BlueButton" onClick={() => this.excel()}>Generate</button>
-           {/* <Link to="http://localhost:8000/test/">
-            <button className="BlueButton" onClick={() => this.excel()}>Generate</button>
-          </Link>  */}
         </div>
         {this.state.modal ? (
             <ModalTime

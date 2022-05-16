@@ -35,7 +35,9 @@ import { Link } from 'react-router-dom';
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
 
-
+function byDate(a, b) {
+    return new Date(a.date).valueOf() - new Date(b.date).valueOf();
+}
 class Schedule extends React.Component{
     constructor(props) {
         super(props);
@@ -89,27 +91,28 @@ class Schedule extends React.Component{
      };
 
     refreshList =()=> {
-
-      
         axios
       .get("/api/allschedules/")
       .then((res) => this.setState({SchedulesList:res.data}))
       .catch((err) => console.log(err))
   };
 
-  excel = () => {
+  excel = (item) => {
     axios
-      .get('http://localhost:8000/test/') //Här borde Urln vara olika beroende på vilket scehma man klickar på.
-                                          //Jag vet inte hur man länkar detta men skriver upp på to-do /Simon
+      .get(`http://localhost:8000/download/${item.date}/`)
       .then((res) => window.open(res.config.url))
   }
 
 
+
+
     renderItems = () => {
     const newItems = this.state.SchedulesList
-  
+        newItems.sort(byDate).reverse();
+
+
     return newItems.map((item) => (
-    <div className="listSchedule"> 
+    <div className="listSchedule">
       <li
         key={item.id}
         className="list-group-item d-flex justify-content-between align-items-center"
@@ -136,7 +139,7 @@ class Schedule extends React.Component{
           <button // Download BUTTON
             href="http://localhost:8000/test"
             className="btn btn-primary mr-2"
-            onClick={() => this.excel()}
+            onClick={() => this.excel(item)}
           >
             Download
           </button>

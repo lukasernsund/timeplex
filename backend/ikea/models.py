@@ -11,6 +11,7 @@ class EmployeeWorktime(models.Model):
     def _str_(self):
         return self.employeeID
 
+
 class Employee(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=100)
@@ -30,9 +31,11 @@ class Employee(models.Model):
     def _str_(self):
         return self.first_name
 
+
 class AllSchedules(models.Model):
-    date = models.DateField()
+    date = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
+    # models.FileField(upload_to=None, max_length=254)
 
     def _str_(self):
         return self.date
