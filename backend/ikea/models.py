@@ -39,3 +39,13 @@ class AllSchedules(models.Model):
 
     def _str_(self):
         return self.date
+
+class EmployeeRequest(models.Model):
+    employeeID = models.ForeignKey('Employee', on_delete=models.CASCADE)
+    start_time = models.CharField(max_length=100)
+    end_time = models.CharField(max_length=100)
+    description = models.CharField(max_length=200)
+    date_schedule = models.CharField(max_length=40)
+
+    def _str_(self):
+        return self.employeeID
