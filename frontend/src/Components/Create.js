@@ -272,11 +272,11 @@ class Create extends React.Component {
   };
 
   render() {
-    // if (this.state.activeItem.date_schedule==="") {
-    //   var today = new Date()
+    if (this.state.activeItem.date_schedule==="") {
+      var today = new Date()
 
-    //   this.setState({activeItem:{date_schedule: today.toISOString().split("T")[0]}})
-    //   };
+      this.setState({activeItem:{date_schedule: today.toISOString().split("T")[0]}})
+      };
 
     return (
       <div>
@@ -285,6 +285,9 @@ class Create extends React.Component {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Date"
+                autoComplete="off"
+                ReadOnlyInput="true"
+                ReadOnly ="true"
                 onChangeRaw={(e) => console.log("vad händer")}
                 value={this.state.activeItem.date_schedule}
                 onChange={(newValue) => {this.setDate(newValue)

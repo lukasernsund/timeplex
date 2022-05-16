@@ -26,8 +26,8 @@ class Employee extends React.Component{
                 backoffice:false,
                 operative_responsible:false,
                 frontline:false,
-                smaland_1:false,
-                smaland_2:false,
+                smalland_1:false,
+                smalland_2:false,
                 count_kk:false,
 
             }

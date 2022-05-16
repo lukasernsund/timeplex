@@ -120,9 +120,9 @@ class Schedule extends React.Component{
         className="text-muted"
       >
           <span
-            title={item.first_name}
+            //title={item.first_name}
           >
-            {"Date: "+item.date +" "+"Name: "+ item.name}
+            {"Date: "+item.date}
           </span>
         </Link>
 

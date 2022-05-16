@@ -36,7 +36,7 @@ function Header() {
             <Link to="/"><img className="logo" src={Logo} alt={Logo}/></Link>
             <NavLink className="navLink" to="/AllSchedules" activeClassName="active"> All Schedules </NavLink>
             <NavLink className="navLink" to="/Create" activeClassName="active"> New Schedule </NavLink>            
-            <NavLink className="navLink" to="/Employee" activeClassName="active"> All Employees </NavLink>
+            <NavLink className="navLink" to="/Employee" activeClassName="active"> Handle Employees </NavLink>
             <Link className="navLink" to="/Settings"><img className="gear" src={Gear} alt={Gear}/></Link>
         </header>
     );
