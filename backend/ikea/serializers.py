@@ -23,4 +23,4 @@ class AllSchedulesSerializer(serializers.ModelSerializer):
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeRequest
-        fields = ('id', 'employeeID',  'start_time', 'end_time', "description")
+        fields = ('id', 'employeeID',  'start_time', 'end_time', "description",'date_schedule')

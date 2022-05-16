@@ -42,6 +42,7 @@ class EmployeeRequest(models.Model):
     start_time = models.CharField(max_length=100)
     end_time = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
+    date_schedule = models.CharField(max_length=40)
 
     def _str_(self):
         return self.employeeID

@@ -16,7 +16,7 @@ class AllSchedulesAdmin(admin.ModelAdmin):
     list_display = ('date','name')
 
 class RequestAdmin(admin.ModelAdmin):
-    list_display = ('employeeID','start_time', 'end_time',"description")
+    list_display = ('employeeID','start_time', 'end_time',"description",'date_schedule')
 # Register your models here.
 
 admin.site.register(Employee, EmployeeAdmin)

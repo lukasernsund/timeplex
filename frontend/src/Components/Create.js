@@ -27,25 +27,28 @@ class Create extends React.Component {
       newEmployeeWorking: [],
       worktimeEmployee: [],
       employeeWorking: [],
-      GetWorktimeEmployee:[],
-      start_time_employees:[],
-      end_time_employees:[],
+      GetWorktimeEmployee: [],
+      start_time_employees: [],
+      end_time_employees: [],
       allWorktimes: [],
-      objectList:[],
+      objectList: [],
       activeItem: {
         employeeID: null,
         start_time: "",
         end_time: "",
-        date_schedule:"",
-    },
-      activeItem2:{          //newly added
+        date_schedule: "",
+      },
+      activeItem2: {          //newly added
         employeeID: null,
         start_time: "reg",
         end_time: "erfref",
-        description : "other"
+        description: "other",
+        date_schedule: ""
       },
-
     };
+    //const current = new Date();
+    //const date = `${current.getDate()}-${current.getMonth() + 1}-${current.getFullYear()}`;
+    //this.state.activeItem.date_schedule = date;
   }
 
   componentDidMount() {
@@ -55,6 +58,7 @@ class Create extends React.Component {
   saveItem = (item) => {
     console.log("inne i save" + this.state.activeItem);
     this.state.activeItem.employeeID = item.id;
+    console.log(this.state.activeItem.employeeID)
     axios
       .post(
         `http://localhost:8000/api/employeeworktime/`,
@@ -88,11 +92,11 @@ class Create extends React.Component {
 
   AddEmployee = (item) => {
 
-    if (this.state.employeeWorking.includes(item)) {
+    if (this.state.newEmployeeWorking.includes(item)) {
       return;
     }
     this.setState((prevState) => ({
-      employeeWorking: [item, ...prevState.employeeWorking],
+      newEmployeeWorking: [item, ...prevState.newEmployeeWorking],
     }));  
   };
 
@@ -155,7 +159,11 @@ class Create extends React.Component {
     console.log(this.state.employeeWorking)
   }
 
-  editItem = (item) => {
+  request = (item) => {
+    console.log("nu kommer item")
+    console.log(item)
+    console.log("nu kommer emloyeeID")
+    console.log(item.id)
     this.setState({ activeItem2: item, modal: !this.state.modal });
   };
 
@@ -164,14 +172,14 @@ class Create extends React.Component {
   };
 
   handleSubmit = (item) => {
+    this.state.activeItem2.employeeID = item.employeeID;
+    console.log("handle submit")
+    console.log( this.state.activeItem2.employeeID)
     this.toggle();
-
-    console.log("inne i save" + this.state.activeItem2.employeeID);
-    this.state.activeItem2.employeeID = item.id;
     axios
         .post(
             `http://localhost:8000/api/employeerequest/`,
-            this.state.activeItem2
+            item
         )
         .then((res) => this.refreshList());
   }
@@ -228,7 +236,7 @@ class Create extends React.Component {
             <span>
               <button
                 className="btn btn-warning mr-2"
-                onClick={() => this.editItem(this.state.activeItem)}
+                onClick={() => this.request(this.state.activeItem2, item.id)}
               >
                 Request
               </button>
@@ -252,7 +260,7 @@ class Create extends React.Component {
   };
   render() {
     if (this.state.activeItem.date_schedule==="") {
-      var today = new Date()
+      var today = new Date().toISOString().split("T")[0];
       this.setState({activeItem:{date_schedule: today}})
       };
 
