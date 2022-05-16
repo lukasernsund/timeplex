@@ -17,12 +17,15 @@ export default class CustomModal extends Component {
         super(props);
         this.state = {
             notEmpty:false,
+            delatable: this.props.deletable,
             activeItem2: this.props.activeItem2,
-            showInfo:false
         };
     }
 
     handleChange = (e) => {
+        console.log("handle change")
+        console.log(this.state.activeItem2)
+        console.log(this.state.delatable)
         let { name, value } = e.target;
 
 
@@ -31,9 +34,12 @@ export default class CustomModal extends Component {
         this.setState({ activeItem2 });
     };
 
-    renderItems = () => {         //Detta behöver ändras, fusk-lösning
-        this.state.showInfo = true;
-        console.log(this.state.activeItem2)
+    deleteItem = () => {
+        this.state.activeItem2.end_time = ""
+        this.state.activeItem2.start_time = ""
+        this.state.activeItem2.description = ""
+        const {onSave} = this.props;
+        onSave(this.state.activeItem2)
     }
 render() {
         const { toggle, onSave } = this.props;
@@ -57,7 +63,7 @@ render() {
                                     id="timeStart"
                                     name="start_time"
                                     autoComplete="off"
-                                    //value={this.state.activeItem2.reqStartTime}
+                                    value={this.state.activeItem2.start_time}
                                     onChange={this.handleChange}
                                     placeholder="Enter first name"
                                 />
@@ -70,7 +76,7 @@ render() {
                                     id="timeEnd"
                                     autoComplete="off"
                                     name="end_time"
-                                    //value={this.state.activeItem2.reqEndTime}
+                                    value={this.state.activeItem2.end_time}
                                     onChange={this.handleChange}
                                     placeholder="Enter last name"
                                 />
@@ -104,15 +110,13 @@ render() {
                                 Save
                             </Button>
                         ) : null}
-                        <Button onClick= {() =>this.renderItems()}>
-                            Add
+
+                        {this.state.delatable === true  ? (
+                        <Button onClick= {(event) => this.deleteItem()}>
+                            Delete
                     </Button>
+                        ) : null}
                     </ModalFooter>
-                    <div>
-                        {this.state.showInfo ? (    //ÄNDRA DETTA
-                            <p> {this.state.activeItem2.description} {this.state.activeItem2.start_time} - {this.state.activeItem2.end_time}</p>
-                            ) : ""}
-                    </div>
                 </div>
             </Modal>
         );
