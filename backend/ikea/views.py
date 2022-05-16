@@ -10,6 +10,7 @@ from .models import EmployeeWorktime
 from rest_framework.decorators import api_view
 from datetime import date
 from datetime import datetime
+import time
 
 import xlwt
 
@@ -21,7 +22,7 @@ from django.contrib.auth.models import User
 
 @api_view(['GET'])
 def export_users_xls(request):
-    print("Inne i funktion")
+    time.sleep(0.1)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
 
@@ -61,12 +62,14 @@ def export_users_xls(request):
 
     # Skapar en lista med object som innehåller ID, startTid och slutTid
     dateRows = EmployeeWorktime.objects.filter(date_schedule = "2022-05-13").values_list("employeeID","start_time", "end_time")
-    # print("Filtrerad lista:", dateRows)
+    print("Filtrerad lista:", dateRows)
 
     counter = 0
     for row in dateRows:
         row_num += 1
+        #Row kommer alltid vara 3 i längd eftersom den innehåller namn, starttid och sluttid
         for col_num in range(len(row)):
+            #skriv namnet
             if col_num == 0:
                 ws.write(row_num, col_num, nameList[counter][0], font_style)
                 counter += 1
