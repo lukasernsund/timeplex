@@ -9,7 +9,7 @@ function Schedule() {
         <div>
         <p> Here the Schedule for { id } will be shown</p>
         <Link to="/allschedules">
-            <button>Go back to All schedules</button>
+            <button className="btn btn-primary mr-2">Go back to All schedules</button>
         </Link>
         </div>
     );

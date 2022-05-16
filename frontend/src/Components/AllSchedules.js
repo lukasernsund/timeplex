@@ -103,10 +103,7 @@ class Schedule extends React.Component{
       .then((res) => window.open(res.config.url))
   }
 
-
-
-
-    renderItems = () => {
+  renderItems = () => {
     const newItems = this.state.SchedulesList
         newItems.sort(byDate).reverse();
 
