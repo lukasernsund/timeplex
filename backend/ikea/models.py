@@ -42,9 +42,9 @@ class AllSchedules(models.Model):
 
 class EmployeeRequest(models.Model):
     employeeID = models.ForeignKey('Employee', on_delete=models.CASCADE)
-    start_time = models.CharField(max_length=100)
-    end_time = models.CharField(max_length=100)
-    description = models.CharField(max_length=200)
+    start_time = models.CharField(max_length=100, blank=True)
+    end_time = models.CharField(max_length=100, blank=True)
+    description = models.CharField(max_length=200, blank=True)
     date_schedule = models.CharField(max_length=40)
 
     def _str_(self):

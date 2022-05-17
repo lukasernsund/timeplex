@@ -15,6 +15,21 @@ class Employee extends React.Component{
         this.state = {
             employeeList: [],
             modal: false,
+            initialItem:{
+                first_name: "",
+                last_name:"",
+                greeter: false,
+                pins:false,
+                eco: false,
+                customer_service:false,
+                pins_responsible: false,
+                backoffice:false,
+                operative_responsible:false,
+                frontline:false,
+                smalland_1:false,
+                smalland_2:false,
+                count_kk:false,
+            },
             activeItem:{
                 first_name: "",
                 last_name:"",
@@ -30,7 +45,10 @@ class Employee extends React.Component{
                 smalland_2:false,
                 count_kk:false,
             }
+            
+            
         }
+    
 
     }
     componentDidMount() {
@@ -62,7 +80,8 @@ class Employee extends React.Component{
   };
 
     openPopup =()=>{
-        this.setState({modal:true})
+      const initialItem=this.state.initialItem
+      this.setState({activeItem: initialItem ,modal:true})
     }
 
     editItem = (item) => {

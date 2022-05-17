@@ -23,12 +23,8 @@ export default class CustomModal extends Component {
     }
 
     handleChange = (e) => {
-        console.log("handle change")
-        console.log(this.state.activeItem2)
-        console.log(this.state.delatable)
         let { name, value } = e.target;
-
-
+        
         const activeItem2 = { ...this.state.activeItem2, [name]: value };
 
         this.setState({ activeItem2 });
@@ -65,7 +61,7 @@ render() {
                                     autoComplete="off"
                                     value={this.state.activeItem2.start_time}
                                     onChange={this.handleChange}
-                                    placeholder="Enter first name"
+                                    required
                                 />
 
                                 </div>
@@ -78,7 +74,7 @@ render() {
                                     name="end_time"
                                     value={this.state.activeItem2.end_time}
                                     onChange={this.handleChange}
-                                    placeholder="Enter last name"
+                                    required
                                 />
                                     </div>
                                 </div>

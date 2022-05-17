@@ -11,3 +11,7 @@
 .endTimeContainer {
 width: 7em;
 }
+input:invalid{
+    border-width: 0.1em;
+    border-color: rgb(231, 32, 32);
+}

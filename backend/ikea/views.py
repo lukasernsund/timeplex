@@ -39,7 +39,7 @@ def export_users_xls(request, date):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['Employee Name', 'Start time', 'End time' ]
+    columns = ['Employee Name', 'Start time', 'End time', 'request start time', 'request end time','request description']
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
@@ -66,7 +66,7 @@ def export_users_xls(request, date):
     # Skapar en lista med object som innehåller ID, startTid och slutTid
     dateRows = EmployeeWorktime.objects.filter(date_schedule = date).values_list("employeeID","start_time", "end_time")
     # print("Filtrerad lista:", dateRows)
-
+    dateRows_requests = EmployeeRequest.objects.filter(date_schedule = date).values_list("start_time", "end_time", "description")
     counter = 0
     for row in dateRows:
         row_num += 1
@@ -77,6 +77,17 @@ def export_users_xls(request, date):
                 print("räknare", counter)
             else:
                 ws.write(row_num, col_num, row[col_num], font_style)
+
+    counter=0
+    row_num=1
+
+    for row in dateRows_requests:
+        
+        startCol = 3
+        plusCol = len(row)
+        for col_num in range(startCol,startCol+plusCol):
+            ws.write(row_num, col_num, row[col_num-3], font_style)
+        row_num += 1
 
     
     wb.save(response)

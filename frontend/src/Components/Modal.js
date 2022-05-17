@@ -54,6 +54,7 @@ export default class CustomModal extends Component {
                 value={this.state.activeItem.first_name}
                 onChange={this.handleChange}
                 placeholder="Enter first name"
+                required
               />
             </FormGroup>
             <FormGroup>
@@ -66,6 +67,7 @@ export default class CustomModal extends Component {
                 value={this.state.activeItem.last_name}
                 onChange={this.handleChange}
                 placeholder="Enter last name"
+                required
               />
             </FormGroup>
 

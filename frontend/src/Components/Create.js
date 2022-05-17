@@ -23,7 +23,7 @@ class Create extends React.Component {
 
     this.state = {
       modal: false,
-      deletable: false,
+      deletable: [],
       workTimeList: [],
       allSchedules: [],
       worktimeEmployee: [],
@@ -35,10 +35,10 @@ class Create extends React.Component {
       endTimeRequest: [],
       descriptionRequest: [],
       allWorktimes: [],
-      allRequest : [],
-      activeSchedule:{
-        date:"",
-        name:"testing"
+      allRequest: [],
+      activeSchedule: {
+        date: "",
+        name: "testing",
       },
       activeItem: {
         employeeID: 1,
@@ -46,12 +46,12 @@ class Create extends React.Component {
         end_time: "",
         date_schedule: "",
       },
-      activeItem2: {          //newly added
+      activeItem2: {
         employeeID: null,
         start_time: "",
         end_time: "",
         description: "",
-        date_schedule: ""
+        date_schedule: "",
       },
     };
   }
@@ -66,7 +66,7 @@ class Create extends React.Component {
       .then((res) => this.setState({ allWorktimes: res.data }))
       .catch((err) => console.log(err));
 
-      axios
+    axios
       .get("http://localhost:8000/api/allschedules/")
       .then((res) => this.setState({ allSchedules: res.data }))
       .catch((err) => console.log(err));
@@ -77,184 +77,215 @@ class Create extends React.Component {
       .catch((err) => console.log(err));
 
     axios
-        .get("http://localhost:8000/api/employeerequest/")
-        .then((res) => this.setState({ allRequest: res.data }))
-        .catch((err) => console.log(err));
+      .get("http://localhost:8000/api/employeerequest/")
+      .then((res) => this.setState({ allRequest: res.data }))
+      .catch((err) => console.log(err));
   };
 
   toggle = () => {
     this.setState({ modal: !this.state.modal });
-
   };
 
   handleChange = (e, ID) => {
-
     let { name, value } = e.target;
     const activeItem = { ...this.state.activeItem, [name]: value };
     this.setState({ activeItem });
-    console.log(this.state.activeItem)
-    if (name==="start_time"){
-      this.state.start_time_employees[ID]=value
-    }
-    else{
-      this.state.end_time_employees[ID]=value
-    
+    if (name === "start_time") {
+      this.state.start_time_employees[ID] = value;
+    } else {
+      this.state.end_time_employees[ID] = value;
     }
   };
 
-  
-  
-
   handleDelete = (item) => {
+    this.state.startTimeRequest[item.id] = "";
+    this.state.endTimeRequest[item.id] = "";
+    this.state.descriptionRequest[item.id] = "";
+
     this.setState({
       employeeWorking: this.state.employeeWorking.filter(function (test) {
         return test !== item;
       }),
-    })
-
+    });
   };
 
   AddEmployee = (item) => {
-
     if (this.state.employeeWorking.includes(item)) {
       return;
     }
 
-    this.state.start_time_employees[item.id]="12:00"
-    this.state.end_time_employees[item.id]="12:00"
-    console.log(this.state.start_time_employees[item.id]+"värdet på tid?" + item.id)
+    this.state.start_time_employees[item.id] = "12:00";
+    this.state.end_time_employees[item.id] = "12:00";
     this.setState((prevState) => ({
       employeeWorking: [item, ...prevState.employeeWorking],
-    }));  
+    }));
   };
 
   excel = () => {
-    if (this.state.activeItem.date_schedule==="") {
-      var today = new Date()
-
-    this.state.activeItem.date_schedule = today.toISOString().split("T")[0]
+    if (this.state.activeItem.date_schedule === "") {
+      var today = new Date();
+      this.state.activeItem.date_schedule = today.toISOString().split("T")[0];
     }
-    console.log(this.state.activeItem.date_schedule);
-    this.updateDatabase()
-    const date = this.state.activeItem.date_schedule
-    this.state.activeSchedule.date=date
-    let existingSchedules = this.state.allSchedules.filter(function(individualSchedule){ return date==individualSchedule.date })
+    this.updateDatabase();
+    const date = this.state.activeItem.date_schedule;
+    this.state.activeSchedule.date = date;
+    let existingSchedules = this.state.allSchedules.filter(function (
+      individualSchedule
+    ) {
+      return date == individualSchedule.date;
+    });
 
     axios
-      .get(`http://localhost:8000/download/${this.state.activeItem.date_schedule}/`)
-      .then((res) => window.open(res.config.url))
+      .get(
+        `http://localhost:8000/download/${this.state.activeItem.date_schedule}/`
+      )
+      .then((res) => window.open(res.config.url));
 
     if (existingSchedules.length) {
-      console.log("eller är vi i if sats?");
-      console.log(existingSchedules[0])
       axios
-      .put(`http://localhost:8000/api/allschedules/${existingSchedules[0].id}`,existingSchedules[0])
-      .then((res) =>this.refreshList())
-    }
-    else {
-      console.log("funkar det?")
+        .put(
+          `http://localhost:8000/api/allschedules/${existingSchedules[0].id}`,
+          existingSchedules[0]
+        )
+        .then((res) => this.refreshList());
+    } else {
       axios
-      .post('http://localhost:8000/api/allschedules/',this.state.activeSchedule)
-      .then((res) =>this.refreshList())
+        .post(
+          "http://localhost:8000/api/allschedules/",
+          this.state.activeSchedule
+        )
+        .then((res) => this.refreshList());
     }
-
-
-}
+  };
 
   updateDatabase = () => {
-    const todayEmployees = this.state.employeeWorking
-    const date = this.state.activeItem.date_schedule
-    const deletingDoubles= this.state.allWorktimes.filter(function (test) {
+    const todayEmployees = this.state.employeeWorking;
+    const date = this.state.activeItem.date_schedule;
+    const deletingDoubles = this.state.allWorktimes.filter(function (test) {
       return test.date_schedule == date;
-    })
-    const deletingDoubleRequests= this.state.allRequest.filter(function (test) {
+    });
+    const deletingDoubleRequests = this.state.allRequest.filter(function (
+      test
+    ) {
       return test.date_schedule == date;
-    })
-    for (let i = 0; i < deletingDoubles.length; i++){
-    axios
-      .delete(`http://localhost:8000/api/employeeworktime/${deletingDoubles[i].id}/`)
-      .then((res) => this.refreshList());
-    }
-    for (let i = 0; i < deletingDoubleRequests.length; i++){
+    });
+
+    for (let i = 0; i < deletingDoubles.length; i++) {
       axios
-          .delete(`http://localhost:8000/api/employeerequest/${deletingDoubleRequests[i].id}/`)
-          .then((res) => this.refreshList());
+        .delete(
+          `http://localhost:8000/api/employeeworktime/${deletingDoubles[i].id}/`
+        )
+        .then((res) => this.refreshList());
+    }
+    for (let i = 0; i < deletingDoubleRequests.length; i++) {
+      axios
+        .delete(
+          `http://localhost:8000/api/employeerequest/${deletingDoubleRequests[i].id}/`
+        )
+        .then((res) => this.refreshList());
     }
 
-    for (let i = 0; i < todayEmployees.length; i++){
+    for (let i = 0; i < todayEmployees.length; i++) {
 
-      const ID = todayEmployees[i].id
-      const startTime = this.state.start_time_employees[ID]
-      const endTime = this.state.end_time_employees[ID]
+      const ID = todayEmployees[i].id;
+      const startTime = this.state.start_time_employees[ID];
+      const endTime = this.state.end_time_employees[ID];
 
       this.state.activeItem.start_time = startTime;
       this.state.activeItem.end_time = endTime;
       this.state.activeItem.employeeID = ID;
 
       axios
-        .post(`http://localhost:8000/api/employeeworktime/`,
-        this.state.activeItem
-      )
-      .then((res) => this.refreshList());
-      if (this.state.startTimeRequest[ID] !== undefined || this.state.startTimeRequest[ID] !== "") {
-        const startTimeRequest = this.state.startTimeRequest[ID]
+        .post(
+          `http://localhost:8000/api/employeeworktime/`,
+          this.state.activeItem
+        )
+        .then((res) => this.refreshList());
 
-        const endTimeRequest = this.state.endTimeRequest[ID]
-        const description = this.state.descriptionRequest[ID]
+      if (this.state.startTimeRequest[ID] === undefined) { 
+        this.state.activeItem2.start_time = "";
+        this.state.activeItem2.end_time = "";
+        this.state.activeItem2.description = "";
+        this.state.activeItem2.employeeID = ID;
+        this.state.activeItem2.date_schedule = date;
+        axios
+          .post(
+            `http://localhost:8000/api/employeerequest/`,
+            this.state.activeItem2
+          )
+          .then((res) => this.refreshList());
+      }
+
+      else {
+        
+        const startTimeRequest = this.state.startTimeRequest[ID];
+        const endTimeRequest = this.state.endTimeRequest[ID];
+        const description = this.state.descriptionRequest[ID];
+
+        console.log("inne vilket iD" +startTimeRequest)
 
         this.state.activeItem2.start_time = startTimeRequest;
         this.state.activeItem2.end_time = endTimeRequest;
         this.state.activeItem2.description = description;
         this.state.activeItem2.employeeID = ID;
         this.state.activeItem2.date_schedule = date;
+
         axios
-            .post(`http://localhost:8000/api/employeerequest/`,
-                this.state.activeItem2
-            )
-            .then((res) => this.refreshList());
+          .post(
+            `http://localhost:8000/api/employeerequest/`,
+            this.state.activeItem2
+          )
+          .then((res) => this.refreshList());
       }
     }
+  };
+
+  setDate(value) {
+    if (value == null) {
+      return;
+    }
+    const chosen_date = value.toISOString().split("T")[0];
+    this.setState({ activeItem: { date_schedule: chosen_date } });
   }
 
-  setDate (value){
-    if (value==null){
-      return
-    }
-    const chosen_date=value.toISOString().split("T")[0]
-    this.setState({activeItem: {date_schedule: chosen_date}})
+  request = (id) => {
+
+    this.state.activeItem2.employeeID = id;
+
+    if (this.state.startTimeRequest[id] !== undefined) {
+      this.state.deletable[id] = true;
+      this.state.activeItem2.start_time = this.state.startTimeRequest[id];
+      this.state.activeItem2.end_time = this.state.endTimeRequest[id];
+      this.state.activeItem2.description = this.state.descriptionRequest[id];
+    } 
+
+    else {
+      this.state.activeItem2.start_time = "";
+      this.state.activeItem2.end_time = "";
+      this.state.activeItem2.description = "";
     }
 
-    request = (id) => {
-        console.log("nu kommer id")
-        console.log(id)
-        this.state.activeItem2.employeeID = id;
-
-      if(this.state.startTimeRequest[id]!== undefined) {
-        this.state.deletable = true;
-        this.state.activeItem2.start_time = this.state.startTimeRequest[id]
-        this.state.activeItem2.end_time = this.state.endTimeRequest[id]
-        this.state.activeItem2.description = this.state.descriptionRequest[id]
-      }else {
-        this.state.activeItem2.start_time = "";
-        this.state.activeItem2.end_time = "";
-        this.state.activeItem2.description = "";
-      }
-      if (this.state.startTimeRequest[id]=== "") {
-        console.log("inne")
-        this.state.deletable = false;
-      }
-      this.setState({modal: !this.state.modal});
-    };
+    if (this.state.startTimeRequest[id] === "") {
+      this.state.deletable[id] = false;
+    }
+    this.setState({ modal: !this.state.modal });
+  };
 
   handleSubmit = (item) => {
+    console.log(item.start_time);
+    if (item.start_time !== "" || item.start_time != undefined){
+    this.state.deletable[item.employeeID]=true;
+    }
+    if (item.start_time == ""){      
+      this.state.deletable[item.employeeID]=false;
+    }
+  
+    
     this.toggle();
-    console.log(item)
     this.state.startTimeRequest[item.employeeID] = item.start_time;
     this.state.endTimeRequest[item.employeeID] = item.end_time;
     this.state.descriptionRequest[item.employeeID] = item.description;
-    console.log( this.state.startTimeRequest[item.employeeID])
-  }
-
+  };
 
   autoComplete = () => {
     const newItems = this.state.workTimeList;
@@ -278,84 +309,86 @@ class Create extends React.Component {
     );
   };
 
-
   renderItems = () => {
     const newItems = this.state.employeeWorking;
     return newItems.map((item) => (
       <div className="listEmployeeWorking">
-        
-          <li
-            key={item.id}
-            className="list-group-item d-flex justify-content-md-start align-items-center"
-          >
-        <span title={item.first_name} className="justify-content-start w-25">
-          {item.first_name + " " + item.last_name}
-        </span>
-            <span className="mr-5"></span>
-            <span className="mr-5"></span>
-
-        <span title={item.employeeID}>
-          {item.start_time}
+        <li
+          key={item.id}
+          className="list-group-item d-flex justify-content-md-start align-items-center"
+        >
+          <span title={item.first_name} className="justify-content-start w-25">
+            {item.first_name + " " + item.last_name}
           </span>
-        <span>
-              <Input
-                type="time"
-                id="employee-start-time"
+          <span className="mr-5"></span>
+          <span className="mr-5"></span>
 
-                name="start_time"
-                autoComplete="off"
-                value={this.state.start_time_employees[item.id]}
-                onChange={(e) => {
-                  this.handleChange(e, item.id);
-               }}
-                placeholder="Enter first name"
-              />
-           </span>
-            <span className="mr-3"></span>
-            <span>
-              <Input
-                type="time"
-                id="employee-end-time"
-                name="end_time"
-                autoComplete="off"
-                value={this.state.end_time_employees[item.id]}
-                onChange={(e) => {
-                  this.handleChange(e, item.id);
-               }}
-                placeholder="Enter first name"
-              />
-            </span>
-            <span className="mr-5"></span>
-            <span className="mr-5"></span>
+          <span title={item.employeeID}>{item.start_time}</span>
+          <span>
+            <Input
+              type="time"
+              id="employee-start-time"
+              name="start_time"
+              autoComplete="off"
+              value={this.state.start_time_employees[item.id]}
+              onChange={(e) => {
+                this.handleChange(e, item.id);
+              }}
+            />
+          </span>
+          <span className="mr-3"></span>
+          <span>
+            <Input
+              type="time"
+              id="employee-end-time"
+              name="end_time"
+              autoComplete="off"
+              value={this.state.end_time_employees[item.id]}
+              onChange={(e) => {
+                this.handleChange(e, item.id);
+              }}
+            />
+          </span>
+          <span className="mr-5"></span>
+          <span className="mr-5"></span>
 
-            <span>
-              <button
-                className="btn btn-warning mr-2"
-                onClick={() => this.request(item.id)}
-              >
-                Request
-              </button>
-              <button
-                className="btn btn-danger mr-2"
-                onClick={() => this.handleDelete(item)}
-              >
-                Delete
-              </button>
-
-
-            </span>
-          </li>
-         
-        </div>
+          <span>
+            
+        
+            {this.state.deletable[item.id] ? (
+            <button
+            className="btn btn-success mr-2"
+            onClick={() => this.request(item.id)}
+          >
+            Request
+          </button>
+        ) : 
+        <button
+        className="btn btn-warning mr-2"
+        onClick={() => this.request(item.id)}
+      >
+        Request
+      </button>}
+            <button
+              className="btn btn-danger mr-2"
+              onClick={() => this.handleDelete(item)}
+            >
+              Delete
+            </button>
+          </span>
+        </li>
+      </div>
     ));
   };
 
   render() {
-    if (this.state.activeItem.date_schedule==="") {
-      var today = new Date()
+    if (this.state.activeItem.date_schedule === "") {
+      var today = new Date();
 
-      this.setState({activeItem:{date_schedule: today.toISOString().split("T")[0]}})
-      };
+      this.setState({
+        activeItem: { date_schedule: today.toISOString().split("T")[0] },
+      });
+    }
 
     return (
       <div>
@@ -366,32 +399,35 @@ class Create extends React.Component {
                 label="Date"
                 autoComplete="off"
                 ReadOnlyInput="true"
-                ReadOnly ="true"
+                ReadOnly="true"
                 onChangeRaw={(e) => console.log("vad händer")}
                 value={this.state.activeItem.date_schedule}
-                onChange={(newValue) => {this.setDate(newValue)
-                  }}
+                onChange={(newValue) => {
+                  this.setDate(newValue);
+                }}
                 renderInput={(params) => <TextField {...params} />}
-
               />
             </LocalizationProvider>
-            <Link to={"/Schedule/"+this.state.activeItem.date_schedule}>
-            <button className="btn btn-primary justify-content-end generateButton" onClick={() => this.excel()}>Generate</button>
-          </Link>
-
+            <Link to={"/Schedule/" + this.state.activeItem.date_schedule}>
+              <button
+                className="btn btn-primary justify-content-end generateButton"
+                onClick={() => this.excel()}
+              >
+                Generate
+              </button>
+            </Link>
           </div>
           <div className="SearchMargin">{this.autoComplete()}</div>
         </div>
         <div className="WorkingList">{this.renderItems()}</div>
-        <div className="GenerateButton">
-        </div>
+        <div className="GenerateButton"></div>
         {this.state.modal ? (
-            <ModalTime
-                activeItem2={this.state.activeItem2}
-                deletable={this.state.deletable}
-                toggle={this.toggle}
-                onSave={this.handleSubmit}
-            />
+          <ModalTime
+            activeItem2={this.state.activeItem2}
+            deletable={this.state.deletable[this.state.activeItem2.employeeID]}
+            toggle={this.toggle}
+            onSave={this.handleSubmit}
+          />
         ) : null}
       </div>
     );
