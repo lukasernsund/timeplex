@@ -222,7 +222,6 @@ class Create extends React.Component {
         const endTimeRequest = this.state.endTimeRequest[ID];
         const description = this.state.descriptionRequest[ID];
 
-        console.log("inne vilket iD" +startTimeRequest)
 
         this.state.activeItem2.start_time = startTimeRequest;
         this.state.activeItem2.end_time = endTimeRequest;
@@ -400,7 +399,6 @@ class Create extends React.Component {
                 autoComplete="off"
                 ReadOnlyInput="true"
                 ReadOnly="true"
-                onChangeRaw={(e) => console.log("vad händer")}
                 value={this.state.activeItem.date_schedule}
                 onChange={(newValue) => {
                   this.setDate(newValue);
