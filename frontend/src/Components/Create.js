@@ -98,6 +98,10 @@ class Create extends React.Component {
   };
 
   handleDelete = (item) => {
+    if(this.state.deletable[item.id]){
+      this.state.deletable[item.id]=false
+    }
+    
     this.state.startTimeRequest[item.id] = "";
     this.state.endTimeRequest[item.id] = "";
     this.state.descriptionRequest[item.id] = "";
@@ -126,6 +130,7 @@ class Create extends React.Component {
       var today = new Date();
       this.state.activeItem.date_schedule = today.toISOString().split("T")[0];
     }
+
     this.updateDatabase();
     const date = this.state.activeItem.date_schedule;
     this.state.activeSchedule.date = date;
@@ -400,7 +405,6 @@ class Create extends React.Component {
                 autoComplete="off"
                 ReadOnlyInput="true"
                 ReadOnly="true"
-                onChangeRaw={(e) => console.log("vad händer")}
                 value={this.state.activeItem.date_schedule}
                 onChange={(newValue) => {
                   this.setDate(newValue);
