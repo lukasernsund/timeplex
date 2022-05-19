@@ -3,9 +3,11 @@ import "./Create.css";
 import "../App.css";
 import axios from "axios";
 import BasicDatePicker from "./Date";
+import Box from '@mui/material/Box';
 //import ComboBox from "./Search";
 import { Link } from "react-router-dom";
 import ModalTime from "./ModalTime";
+import ModalDelete from "./ModalDelete.js"   //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 import { Input } from "reactstrap";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
@@ -23,7 +25,10 @@ class Create extends React.Component {
 
     this.state = {
       modal: false,
+      showDeleteModal: false,
       deletable: false,
+      deleteItemModal: false,   // XXXXXXXXXXXXXXXXXXXXXXX
+      tempSaveItem: {},
       workTimeList: [],
       allSchedules: [],
       worktimeEmployee: [],
@@ -87,6 +92,10 @@ class Create extends React.Component {
 
   };
 
+  toggleDelete = () => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+    this.setState({ showDeleteModal: !this.state.showDeleteModal });
+  };
+
   handleChange = (e, ID) => {
 
     let { name, value } = e.target;
@@ -102,16 +111,21 @@ class Create extends React.Component {
     }
   };
 
-  
-  
 
   handleDelete = (item) => {
-    this.setState({
-      employeeWorking: this.state.employeeWorking.filter(function (test) {
-        return test !== item;
-      }),
-    })
+    if(this.state.deleteItemModal) {
+      this.setState({
+        employeeWorking: this.state.employeeWorking.filter(function (test) {
+          return test !== item;
+        }),
+      })
+      this.state.deleteItemModal = false;
+    }
+  };
 
+  popUpDelete = (item) => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    this.setState({ showDeleteModal: !this.state.showDeleteModal });
+    this.state.tempSaveItem = item;
   };
 
   AddEmployee = (item) => {
@@ -216,12 +230,19 @@ class Create extends React.Component {
     }
   }
 
+
   setDate (value){
+    console.log(value)
     if (value==null){
       return
     }
-    const chosen_date=value.toISOString().split("T")[0]
-    this.setState({activeItem: {date_schedule: chosen_date}})
+    try {
+      const chosen_date = value.toISOString().split("T")[0]
+      this.setState({activeItem: {date_schedule: chosen_date}})
+    }
+    catch(error){
+
+    }
     }
 
     request = (id) => {
@@ -254,6 +275,20 @@ class Create extends React.Component {
     this.state.descriptionRequest[item.employeeID] = item.description;
     console.log( this.state.startTimeRequest[item.employeeID])
   }
+
+
+  handleSubmitDelete = (item) => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    this.toggleDelete();
+    this.state.deleteItemModal = item;
+    this.handleDelete(this.state.tempSaveItem)
+  }
+
+  handleDateChangeRaw = (e) => {
+    console.log("inneIChangeRaw")
+    e.preventDefault();
+  }
+
+
 
 
   autoComplete = () => {
@@ -337,7 +372,7 @@ class Create extends React.Component {
               </button>
               <button
                 className="btn btn-danger mr-2"
-                onClick={() => this.handleDelete(item)}
+                onClick={() => this.popUpDelete(item)}  //SHOULD ADD INPUT ITEM TO CALL HANDLE DELETE FROM THIS FUNC
               >
                 Delete
               </button>
@@ -366,12 +401,16 @@ class Create extends React.Component {
                 label="Date"
                 autoComplete="off"
                 ReadOnlyInput="true"
-                ReadOnly ="true"
-                onChangeRaw={(e) => console.log("vad händer")}
+                minDate={new Date()}
+                disableMaskedInput = "false"
                 value={this.state.activeItem.date_schedule}
+
                 onChange={(newValue) => {this.setDate(newValue)
                   }}
-                renderInput={(params) => <TextField {...params} />}
+                //onChangeRaw={(event) => this.handleDateChangeRaw(event)}
+                renderInput={(params) => <TextField {...params} sx={{
+                  svg: { color: '#3F72AF' },
+                }}/>}
 
               />
             </LocalizationProvider>
@@ -391,6 +430,13 @@ class Create extends React.Component {
                 deletable={this.state.deletable}
                 toggle={this.toggle}
                 onSave={this.handleSubmit}
+            />
+        ) : null}
+
+        {this.state.showDeleteModal ? (
+            <ModalDelete
+                toggle={this.toggleDelete}
+                onSave = {this.handleSubmitDelete}
             />
         ) : null}
       </div>
