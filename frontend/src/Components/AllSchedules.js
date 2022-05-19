@@ -1,30 +1,3 @@
-// import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
-// import VirtualizedList from "./ListAllSchedule";
-// import './AllSchedules.css'
-
-
-// function AllSchedules() {
-
-//     return (
-//         <div>
-//             <div className='List'>
-//             <VirtualizedList />
-//             </div>
-//             <ul style={{    listStyleType: "none"}}>
-//                 <Link to="/Schedule/1"><li> A scehdule</li></Link>
-//                 <Link to="/Schedule/2"><li> A scehdule</li></Link>
-//                 <Link to="/Schedule/3"><li> A scehdule</li></Link>
-//                 <Link to="/Schedule/4"><li> A scehdule</li></Link>
-//                 <Link to="/Schedule/5"><li> A scehdule</li></Link>
-//             </ul>
-//         </div>
-//     );
-// }
-
-// export default AllSchedules;
-
-
 import React from 'react';
 import Modal from "./Modal";
 import './AllSchedules.css';
@@ -117,20 +90,13 @@ class Schedule extends React.Component{
         className="text-muted"
       >
           <span
-            //title={item.first_name}
           >
             {"Date: "+item.date}
           </span>
         </Link>
 
         <span>
-          {/* <button // EDIT BUTTON
-            className="btn btn-secondary mr-2"
-            onClick={() => this.editItem(item)}
-          >
-            Edit
-          </button> */}
-          <button // Download BUTTON
+          <button
             href="http://localhost:8000/test"
             className="btn btn-primary mr-2"
             onClick={() => this.excel(item)}
@@ -153,7 +119,6 @@ class Schedule extends React.Component{
     render() {
         return(
         <div>
-            {/* <button onClick={this.openPopup} className="ButtonEmployee">Add schedule</button> */}
             {this.state.modal ? (
           <Modal
             activeItem={this.state.activeItem}
