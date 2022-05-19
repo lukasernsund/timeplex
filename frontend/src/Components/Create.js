@@ -227,7 +227,6 @@ class Create extends React.Component {
         const endTimeRequest = this.state.endTimeRequest[ID];
         const description = this.state.descriptionRequest[ID];
 
-        console.log("inne vilket iD" +startTimeRequest)
 
         this.state.activeItem2.start_time = startTimeRequest;
         this.state.activeItem2.end_time = endTimeRequest;

@@ -81,9 +81,6 @@ class Schedule extends React.Component{
 
     openPopup =()=>{
         this.setState({modal:true})
-        console.log("inne i openpupup")
-        console.log(this.state.activeItem)
-        console.log(this.state.SchedulesList)
     }
 
     editItem = (item) => {
