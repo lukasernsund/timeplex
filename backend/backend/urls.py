@@ -23,9 +23,10 @@ router = routers.DefaultRouter()
 router.register(r'employee', views.EmployeeView, 'ikea')
 router.register(r'employeeworktime', views.WorktimeView, 'ikea')
 router.register(r'allschedules', views.AllSchedulesView, 'ikea')
+router.register(r'employeerequest', views.RequestView, 'ikea')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('test/', export_users_xls)
+    path('download/<str:date>/', export_users_xls)
 ]

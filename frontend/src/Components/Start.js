@@ -9,8 +9,8 @@ class Start extends React.Component {
         <div className="Body">
             <img className="StartImg" src={startImg} />
             <div className="ButtonsDiv">
-                <Link to="/AllSchedules"><button className="AllButton">All schedules</button></Link>
-                <Link to="/Create"><button className="NewButton">New Schedule</button></Link>
+                <Link to="/AllSchedules"><button className="AllButton btn btn-outline-primary ">All schedules</button></Link>
+                <Link to="/Create"><button className="AllButton btn btn-outline-primary">New Schedule</button></Link>
             </div>
         </div>
         );

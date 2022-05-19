@@ -5,7 +5,7 @@ import axios from "axios";
 import BasicDatePicker from "./Date";
 //import ComboBox from "./Search";
 import { Link } from "react-router-dom";
-import Modal from "./Modal";
+import ModalTime from "./ModalTime";
 import { Input } from "reactstrap";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
@@ -22,18 +22,37 @@ class Create extends React.Component {
     super(props);
 
     this.state = {
+      modal: false,
+      deletable: [],
       workTimeList: [],
-      date: "",
+      allSchedules: [],
       worktimeEmployee: [],
       employeeWorking: [],
+      GetWorktimeEmployee: [],
+      start_time_employees: [],
+      end_time_employees: [],
+      startTimeRequest: [],
+      endTimeRequest: [],
+      descriptionRequest: [],
       allWorktimes: [],
-      objectList:[],
+      allRequest: [],
+      activeSchedule: {
+        date: "",
+        name: "testing",
+      },
       activeItem: {
-        employeeID: 10,
-        start_time: "empty",
-        end_time: "empty",
-    },
-
+        employeeID: 1,
+        start_time: "",
+        end_time: "",
+        date_schedule: "",
+      },
+      activeItem2: {
+        employeeID: null,
+        start_time: "",
+        end_time: "",
+        description: "",
+        date_schedule: "",
+      },
     };
   }
 
@@ -41,28 +60,48 @@ class Create extends React.Component {
     this.refreshList();
   }
 
-  saveItem = (item) => {
-    console.log("inne i save" + this.state.activeItem);
-    this.state.activeItem.employeeID = item.id;
+  refreshList = () => {
     axios
-      .post(
-        `http://localhost:8000/api/employeeworktime/`,
-        this.state.activeItem
-      )
-      .then((res) => this.refreshList());
+      .get("http://localhost:8000/api/employeeworktime/")
+      .then((res) => this.setState({ allWorktimes: res.data }))
+      .catch((err) => console.log(err));
+
+    axios
+      .get("http://localhost:8000/api/allschedules/")
+      .then((res) => this.setState({ allSchedules: res.data }))
+      .catch((err) => console.log(err));
+
+    axios
+      .get("http://localhost:8000/api/employee/")
+      .then((res) => this.setState({ workTimeList: res.data }))
+      .catch((err) => console.log(err));
+
+    axios
+      .get("http://localhost:8000/api/employeerequest/")
+      .then((res) => this.setState({ allRequest: res.data }))
+      .catch((err) => console.log(err));
   };
 
-  handleChange = (e) => {
+  toggle = () => {
+    this.setState({ modal: !this.state.modal });
+  };
+
+  handleChange = (e, ID) => {
     let { name, value } = e.target;
-    //name = start_time & end_time, value = vald tid
     const activeItem = { ...this.state.activeItem, [name]: value };
     this.setState({ activeItem });
-    console.log("objects" + name + value )
-    
-    
+    if (name === "start_time") {
+      this.state.start_time_employees[ID] = value;
+    } else {
+      this.state.end_time_employees[ID] = value;
+    }
   };
 
   handleDelete = (item) => {
+    this.state.startTimeRequest[item.id] = "";
+    this.state.endTimeRequest[item.id] = "";
+    this.state.descriptionRequest[item.id] = "";
+
     this.setState({
       employeeWorking: this.state.employeeWorking.filter(function (test) {
         return test !== item;
@@ -71,32 +110,184 @@ class Create extends React.Component {
   };
 
   AddEmployee = (item) => {
-
     if (this.state.employeeWorking.includes(item)) {
       return;
     }
+
+    this.state.start_time_employees[item.id] = "12:00";
+    this.state.end_time_employees[item.id] = "12:00";
     this.setState((prevState) => ({
       employeeWorking: [item, ...prevState.employeeWorking],
-    }));  
+    }));
   };
 
-  refreshList = () => {
-    axios
-      .get("/api/employeeworktime/")
-      .then((res) => this.setState({ allWorktimes: res.data }))
-      .catch((err) => console.log(err));
+  excel = () => {
+    if (this.state.activeItem.date_schedule === "") {
+      var today = new Date();
+      this.state.activeItem.date_schedule = today.toISOString().split("T")[0];
+    }
+    this.updateDatabase();
+    const date = this.state.activeItem.date_schedule;
+    this.state.activeSchedule.date = date;
+    let existingSchedules = this.state.allSchedules.filter(function (
+      individualSchedule
+    ) {
+      return date == individualSchedule.date;
+    });
 
     axios
-      .get("/api/employee/")
-      .then((res) => this.setState({ workTimeList: res.data }))
-      .catch((err) => console.log(err));
+      .get(
+        `http://localhost:8000/download/${this.state.activeItem.date_schedule}/`
+      )
+      .then((res) => window.open(res.config.url));
+
+    if (existingSchedules.length) {
+      axios
+        .put(
+          `http://localhost:8000/api/allschedules/${existingSchedules[0].id}`,
+          existingSchedules[0]
+        )
+        .then((res) => this.refreshList());
+    } else {
+      axios
+        .post(
+          "http://localhost:8000/api/allschedules/",
+          this.state.activeSchedule
+        )
+        .then((res) => this.refreshList());
+    }
   };
 
-  testa = (itemID) =>{
-    
+  updateDatabase = () => {
+    const todayEmployees = this.state.employeeWorking;
+    const date = this.state.activeItem.date_schedule;
+    const deletingDoubles = this.state.allWorktimes.filter(function (test) {
+      return test.date_schedule == date;
+    });
+    const deletingDoubleRequests = this.state.allRequest.filter(function (
+      test
+    ) {
+      return test.date_schedule == date;
+    });
+
+    for (let i = 0; i < deletingDoubles.length; i++) {
+      axios
+        .delete(
+          `http://localhost:8000/api/employeeworktime/${deletingDoubles[i].id}/`
+        )
+        .then((res) => this.refreshList());
+    }
+    for (let i = 0; i < deletingDoubleRequests.length; i++) {
+      axios
+        .delete(
+          `http://localhost:8000/api/employeerequest/${deletingDoubleRequests[i].id}/`
+        )
+        .then((res) => this.refreshList());
+    }
+
+    for (let i = 0; i < todayEmployees.length; i++) {
+
+      const ID = todayEmployees[i].id;
+      const startTime = this.state.start_time_employees[ID];
+      const endTime = this.state.end_time_employees[ID];
+
+      this.state.activeItem.start_time = startTime;
+      this.state.activeItem.end_time = endTime;
+      this.state.activeItem.employeeID = ID;
+
+      axios
+        .post(
+          `http://localhost:8000/api/employeeworktime/`,
+          this.state.activeItem
+        )
+        .then((res) => this.refreshList());
+
+      if (this.state.startTimeRequest[ID] === undefined) { 
+        this.state.activeItem2.start_time = "";
+        this.state.activeItem2.end_time = "";
+        this.state.activeItem2.description = "";
+        this.state.activeItem2.employeeID = ID;
+        this.state.activeItem2.date_schedule = date;
+        axios
+          .post(
+            `http://localhost:8000/api/employeerequest/`,
+            this.state.activeItem2
+          )
+          .then((res) => this.refreshList());
+      }
+
+      else {
+        
+        const startTimeRequest = this.state.startTimeRequest[ID];
+        const endTimeRequest = this.state.endTimeRequest[ID];
+        const description = this.state.descriptionRequest[ID];
+
+        console.log("inne vilket iD" +startTimeRequest)
+
+        this.state.activeItem2.start_time = startTimeRequest;
+        this.state.activeItem2.end_time = endTimeRequest;
+        this.state.activeItem2.description = description;
+        this.state.activeItem2.employeeID = ID;
+        this.state.activeItem2.date_schedule = date;
+
+        axios
+          .post(
+            `http://localhost:8000/api/employeerequest/`,
+            this.state.activeItem2
+          )
+          .then((res) => this.refreshList());
+      }
+    }
+  };
+
+  setDate(value) {
+    if (value == null) {
+      return;
+    }
+    const chosen_date = value.toISOString().split("T")[0];
+    this.setState({ activeItem: { date_schedule: chosen_date } });
   }
 
-  test = () => {
+  request = (id) => {
+
+    this.state.activeItem2.employeeID = id;
+
+    if (this.state.startTimeRequest[id] !== undefined) {
+      this.state.deletable[id] = true;
+      this.state.activeItem2.start_time = this.state.startTimeRequest[id];
+      this.state.activeItem2.end_time = this.state.endTimeRequest[id];
+      this.state.activeItem2.description = this.state.descriptionRequest[id];
+    } 
+
+    else {
+      this.state.activeItem2.start_time = "";
+      this.state.activeItem2.end_time = "";
+      this.state.activeItem2.description = "";
+    }
+
+    if (this.state.startTimeRequest[id] === "") {
+      this.state.deletable[id] = false;
+    }
+    this.setState({ modal: !this.state.modal });
+  };
+
+  handleSubmit = (item) => {
+    console.log(item.start_time);
+    if (item.start_time !== "" || item.start_time != undefined){
+    this.state.deletable[item.employeeID]=true;
+    }
+    if (item.start_time == ""){      
+      this.state.deletable[item.employeeID]=false;
+    }
+  
+    
+    this.toggle();
+    this.state.startTimeRequest[item.employeeID] = item.start_time;
+    this.state.endTimeRequest[item.employeeID] = item.end_time;
+    this.state.descriptionRequest[item.employeeID] = item.description;
+  };
+
+  autoComplete = () => {
     const newItems = this.state.workTimeList;
     return (
       <div>
@@ -117,83 +308,88 @@ class Create extends React.Component {
       </div>
     );
   };
-  excel = () => {
-    axios
-      .get('http://localhost:8000/test/')
-      .then((res) => window.open(res.config.url))
-  }
 
   renderItems = () => {
     const newItems = this.state.employeeWorking;
     return newItems.map((item) => (
       <div className="listEmployeeWorking">
-        <ul>
-          <li
-            key={item.id}
-            className="list-group-item d-flex justify-content-md-start align-items-center"
-          >
-        <span title={item.first_name} className="justify-content-start w-25">
-          {item.first_name + " " + item.last_name}
-        </span>
-            <span className="mr-5"></span>
-            <span className="mr-5"></span>
-
-        <span title={item.employeeID}>
-          {item.start_time}
+        <li
+          key={item.id}
+          className="list-group-item d-flex justify-content-md-start align-items-center"
+        >
+          <span title={item.first_name} className="justify-content-start w-25">
+            {item.first_name + " " + item.last_name}
           </span>
-        <span>
-              <Input
-                type="time"
-                id="employee-first_name"
-                name="start_time"
-                autoComplete="off"
-                
-                onChange={this.handleChange & this.testa(item.id)}
-                placeholder="Enter first name"
-              />
-           </span>
-            <span className="mr-3"></span>
-            <span>
-              <Input
-                type="time"
-                id="employee-first_name"
-                name="end_time"
-                autoComplete="off"
-                
-                onChange={this.handleChange}
-                placeholder="Enter first name"
-              />
-            </span>
-            <span className="mr-5"></span>
-            <span className="mr-5"></span>
+          <span className="mr-5"></span>
+          <span className="mr-5"></span>
 
-            <span>
-              <button
-                className="btn btn-warning mr-2"
-                onClick={() => this.editItem(item)}
-              >
-                Request
-              </button>
-              <button
-                className="btn btn-danger mr-2"
-                onClick={() => this.handleDelete(item)}
-              >
-                Delete
-              </button>
+          <span title={item.employeeID}>{item.start_time}</span>
+          <span>
+            <Input
+              type="time"
+              id="employee-start-time"
+              name="start_time"
+              autoComplete="off"
+              value={this.state.start_time_employees[item.id]}
+              onChange={(e) => {
+                this.handleChange(e, item.id);
+              }}
+            />
+          </span>
+          <span className="mr-3"></span>
+          <span>
+            <Input
+              type="time"
+              id="employee-end-time"
+              name="end_time"
+              autoComplete="off"
+              value={this.state.end_time_employees[item.id]}
+              onChange={(e) => {
+                this.handleChange(e, item.id);
+              }}
+            />
+          </span>
+          <span className="mr-5"></span>
+          <span className="mr-5"></span>
 
-              <button
-                className="btn btn-success mr-2"
-                onClick={() => this.saveItem(item)}
-              >
-                Save
-              </button>
-            </span>
-          </li>
-          </ul>
-        </div>
+          <span>
+            
+        
+            {this.state.deletable[item.id] ? (
+            <button
+            className="btn btn-success mr-2"
+            onClick={() => this.request(item.id)}
+          >
+            Request
+          </button>
+        ) : 
+        <button
+        className="btn btn-warning mr-2"
+        onClick={() => this.request(item.id)}
+      >
+        Request
+      </button>}
+            <button
+              className="btn btn-danger mr-2"
+              onClick={() => this.handleDelete(item)}
+            >
+              Delete
+            </button>
+          </span>
+        </li>
+      </div>
     ));
   };
+
   render() {
+    if (this.state.activeItem.date_schedule === "") {
+      var today = new Date();
+
+      this.setState({
+        activeItem: { date_schedule: today.toISOString().split("T")[0] },
+      });
+    }
+
     return (
       <div>
         <div>
@@ -201,23 +397,38 @@ class Create extends React.Component {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
                 label="Date"
-                value={this.state.date}
+                autoComplete="off"
+                ReadOnlyInput="true"
+                ReadOnly="true"
+                onChangeRaw={(e) => console.log("vad händer")}
+                value={this.state.activeItem.date_schedule}
                 onChange={(newValue) => {
-                  this.setState({ date: newValue.toISOString().split("T")[0] });
+                  this.setDate(newValue);
                 }}
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
+            <Link to={"/Schedule/" + this.state.activeItem.date_schedule}>
+              <button
+                className="btn btn-primary justify-content-end generateButton"
+                onClick={() => this.excel()}
+              >
+                Generate
+              </button>
+            </Link>
           </div>
-          <div className="SearchMargin">{this.test()}</div>
+          <div className="SearchMargin">{this.autoComplete()}</div>
         </div>
         <div className="WorkingList">{this.renderItems()}</div>
-        <div className="GenerateButton">
-        <button href="http://localhost:8000/test" className="BlueButton" onClick={() => this.excel()}>Generate</button>
-           {/* <Link to="http://localhost:8000/test/">
-            <button className="BlueButton" onClick={() => this.excel()}>Generate</button>
-          </Link>  */}
-        </div>
+        <div className="GenerateButton"></div>
+        {this.state.modal ? (
+          <ModalTime
+            activeItem2={this.state.activeItem2}
+            deletable={this.state.deletable[this.state.activeItem2.employeeID]}
+            toggle={this.toggle}
+            onSave={this.handleSubmit}
+          />
+        ) : null}
       </div>
     );
   }

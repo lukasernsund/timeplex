@@ -1,0 +1,17 @@
+
+.gridContainer {
+    display: grid;
+    grid-auto-rows: 1.5em;
+    grid-template-columns: 30% 30%;
+}
+.startTimeContainer {
+    width: 7em;
+}
+
+.endTimeContainer {
+width: 7em;
+}
+input:invalid{
+    border-width: 0.1em;
+    border-color: rgb(231, 32, 32);
+}

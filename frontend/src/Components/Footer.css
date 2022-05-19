@@ -1,10 +1,20 @@
-.Footer {
+/* Denna ligger inte längst ner när dynamiska grejer blir längre än sidan */
+/* .Footer { 
     width: 100%;
     text-align: left;
     padding-left: 2em;
     justify-content: flex-end;
-/*     margin-bottom: 1em; */
+    margin-bottom: 1em;
     position: absolute;
     bottom: 0;
-/*     background-color: gray; */
+} */
+
+.Footer { /*Denna funkar så att det alltid är längst ner, men kan lägga sig över dynamiska grejer på sidan om de blir lägnre än sidan*/
+    width: 100%;
+    text-align: left;
+    position: fixed;
+    bottom:0;
+    left:0;
+    text-align: left;
+    padding-left: 1em;
 }

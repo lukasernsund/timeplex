@@ -6,9 +6,11 @@ class EmployeeWorktime(models.Model):
     employeeID = models.ForeignKey('Employee', on_delete=models.CASCADE)
     start_time = models.CharField(max_length=100)
     end_time = models.CharField(max_length=100)
+    date_schedule = models.CharField(max_length=40)
 
     def _str_(self):
         return self.employeeID
+
 
 class Employee(models.Model):
     first_name = models.CharField(max_length=50)
@@ -29,9 +31,21 @@ class Employee(models.Model):
     def _str_(self):
         return self.first_name
 
+
 class AllSchedules(models.Model):
-    date = models.DateField()
+    date = models.CharField(max_length=50)
     name = models.CharField(max_length=50)
+    # models.FileField(upload_to=None, max_length=254)
 
     def _str_(self):
         return self.date
+
+class EmployeeRequest(models.Model):
+    employeeID = models.ForeignKey('Employee', on_delete=models.CASCADE)
+    start_time = models.CharField(max_length=100, blank=True)
+    end_time = models.CharField(max_length=100, blank=True)
+    description = models.CharField(max_length=200, blank=True)
+    date_schedule = models.CharField(max_length=40)
+
+    def _str_(self):
+        return self.employeeID

@@ -54,6 +54,7 @@ export default class CustomModal extends Component {
                 value={this.state.activeItem.first_name}
                 onChange={this.handleChange}
                 placeholder="Enter first name"
+                required
               />
             </FormGroup>
             <FormGroup>
@@ -66,6 +67,7 @@ export default class CustomModal extends Component {
                 value={this.state.activeItem.last_name}
                 onChange={this.handleChange}
                 placeholder="Enter last name"
+                required
               />
             </FormGroup>
 
@@ -161,8 +163,8 @@ export default class CustomModal extends Component {
               <Label check>
                 <Input
                   type="checkbox"
-                  name="smaland_1"
-                  checked={this.state.activeItem.smaland_1}
+                  name="smalland_1"
+                  checked={this.state.activeItem.smalland_1}
                   onChange={this.handleChange}
                 />
                 Småland 1
@@ -173,8 +175,8 @@ export default class CustomModal extends Component {
               <Label check>
                 <Input
                   type="checkbox"
-                  name="smaland_2"
-                  checked={this.state.activeItem.smaland_2}
+                  name="smalland_2"
+                  checked={this.state.activeItem.smalland_2}
                   onChange={this.handleChange}
                 />
                 Småland 2
