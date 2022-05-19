@@ -109,6 +109,10 @@ class Create extends React.Component {
 
 
   handleDelete = (item) => {
+    if(this.state.deletable[item.id]){
+      this.state.deletable[item.id]=false
+    }
+
     this.state.startTimeRequest[item.id] = "";
     this.state.endTimeRequest[item.id] = "";
     this.state.descriptionRequest[item.id] = "";
@@ -146,6 +150,7 @@ class Create extends React.Component {
       var today = new Date();
       this.state.activeItem.date_schedule = today.toISOString().split("T")[0];
     }
+
     this.updateDatabase();
     const date = this.state.activeItem.date_schedule;
     this.state.activeSchedule.date = date;
@@ -242,7 +247,6 @@ class Create extends React.Component {
         const endTimeRequest = this.state.endTimeRequest[ID];
         const description = this.state.descriptionRequest[ID];
 
-        console.log("inne vilket iD" +startTimeRequest)
 
         this.state.activeItem2.start_time = startTimeRequest;
         this.state.activeItem2.end_time = endTimeRequest;
