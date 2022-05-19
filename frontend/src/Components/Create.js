@@ -27,7 +27,8 @@ class Create extends React.Component {
       modal: false,
       deletable: [],
       showDeleteModal: false,
-      deleteItemModal: false,   // XXXXXXXXXXXXXXXXXXXXXXX
+      deleteItemModal: false,
+      deleteModalText: ["employee","from the schedule"],
       tempSaveItem: {},
       workTimeList: [],
       allSchedules: [],
@@ -125,6 +126,7 @@ class Create extends React.Component {
   popUpDelete = (item) => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     this.setState({ showDeleteModal: !this.state.showDeleteModal });
     this.state.tempSaveItem = item;
+    console.log(this.state.tempSaveItem)
   };
 
   AddEmployee = (item) => {
@@ -132,8 +134,8 @@ class Create extends React.Component {
       return;
     }
 
-    this.state.start_time_employees[item.id] = "12:00";
-    this.state.end_time_employees[item.id] = "12:00";
+    this.state.start_time_employees[item.id] = "09:00";
+    this.state.end_time_employees[item.id] = "17:00";
     this.setState((prevState) => ({
       employeeWorking: [item, ...prevState.employeeWorking],
     }));
@@ -318,14 +320,6 @@ class Create extends React.Component {
     this.handleDelete(this.state.tempSaveItem)
   }
 
-  handleDateChangeRaw = (e) => {
-    console.log("inneIChangeRaw")
-    e.preventDefault();
-  }
-
-
-
-
   autoComplete = () => {
     const newItems = this.state.workTimeList;
     return (
@@ -474,6 +468,8 @@ class Create extends React.Component {
             <ModalDelete
                 toggle={this.toggleDelete}
                 onSave = {this.handleSubmitDelete}
+                tempSaveItem ={this.state.tempSaveItem}
+                deleteModalText ={this.state.deleteModalText}
             />
         ) : null}
       </div>

@@ -16,6 +16,8 @@ export default class CustomModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            tempSaveItem : this.props.tempSaveItem,
+            deleteModalText : this.props.deleteModalText,
             //deleteItem: this.props.deleteItem,
             //itemProps: this.props.itemProps
         };
@@ -32,7 +34,10 @@ export default class CustomModal extends Component {
         return (
 
             <Modal isOpen={true} toggle={toggle}>
-                <ModalHeader toggle={toggle}>Are you sure you want to delete this employee?</ModalHeader>
+                {this.state.tempSaveItem.first_name !==undefined ? (
+                <ModalHeader toggle={toggle}>Are you sure you want to delete {this.state.deleteModalText[0]} "{this.state.tempSaveItem.first_name} {this.state.tempSaveItem.last_name}" {this.state.deleteModalText[1]}?</ModalHeader>
+                    ) :
+                    <ModalHeader toggle={toggle}> Are you sure you want to delete  {this.state.deleteModalText[0]} "{this.state.tempSaveItem.date}" {this.state.deleteModalText[1]}?</ModalHeader> }
                 <div className="inputEmployee">
 
                     <ModalFooter>
@@ -40,13 +45,13 @@ export default class CustomModal extends Component {
                                 color="danger"
                                 onClick={() => onSave(true)}
                             >
-                                YES
+                                DELETE
                             </Button>
                         <Button
                             color="success"
                             onClick={() => toggle()}
                         >
-                            NO
+                            CANCEL
                         </Button>
                     </ModalFooter>
                 </div>

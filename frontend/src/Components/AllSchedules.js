@@ -32,6 +32,7 @@ import '../App.css'
 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import ModalDelete from "./ModalDelete";
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
 
@@ -43,6 +44,10 @@ class Schedule extends React.Component{
         super(props);
         this.state = {
             SchedulesList: [],
+            showDeleteModal: false,
+            deleteItemModal: false,
+            tempSaveItem: {},
+            deleteModalText: ["schedule with date:",""],
             modal: false,
             activeItem:{
                 date: "2022,11,10",
@@ -56,14 +61,21 @@ class Schedule extends React.Component{
   }
     toggle = () => {
     this.setState({ modal: !this.state.modal });
-
   };
+    toggleDelete = () => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+        this.setState({ showDeleteModal: !this.state.showDeleteModal });
+    };
 
     handleDelete = (item) => {
     axios
       .delete(`http://localhost:8000/api/allschedules/${item.id}/`)
       .then((res) => this.refreshList());
   };
+    popUpDelete = (item) => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        this.setState({ showDeleteModal: !this.state.showDeleteModal });
+        this.state.tempSaveItem = item;
+        console.log(item)
+    };
 
     handleSubmit = (item) => {
         this.toggle();
@@ -79,6 +91,11 @@ class Schedule extends React.Component{
       .then((res) => this.refreshList());
   };
 
+    handleSubmitDelete = (item) => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        this.toggleDelete();
+        this.state.deleteItemModal = item;
+        this.handleDelete(this.state.tempSaveItem)
+    }
     openPopup =()=>{
         this.setState({modal:true})
         console.log("inne i openpupup")
@@ -142,7 +159,7 @@ class Schedule extends React.Component{
           </button>
           <button //DELETE BUTTON
             className="btn btn-danger"
-            onClick={() => this.handleDelete(item)}
+            onClick={() => this.popUpDelete(item)}
           >
             Delete
           </button>
@@ -158,12 +175,20 @@ class Schedule extends React.Component{
         <div>
             {/* <button onClick={this.openPopup} className="ButtonEmployee">Add schedule</button> */}
             {this.state.modal ? (
-          <Modal
+          <Modal                                    //SKA DENNA MODAL BORT?
             activeItem={this.state.activeItem}
             toggle={this.toggle}
             onSave={this.handleSubmit}
           />
         ) : null}
+            {this.state.showDeleteModal ? (
+                <ModalDelete
+                    toggle={this.toggleDelete}
+                    onSave = {this.handleSubmitDelete}
+                    tempSaveItem = {this.state.tempSaveItem}
+                    deleteModalText = {this.state.deleteModalText}
+                />
+            ) : null}
         {this.renderItems()}
         </div>
         )
