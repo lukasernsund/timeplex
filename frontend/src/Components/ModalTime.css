@@ -8,6 +8,11 @@
     width: 7em;
 }
 
+.descriptionText {
+    padding-left: 1em;
+}
+
+
 .endTimeContainer {
 width: 7em;
 }

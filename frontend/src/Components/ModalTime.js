@@ -46,6 +46,7 @@ render() {
             <Modal isOpen={true} toggle={toggle}>
                 <div className="inputEmployee">
                     <ModalHeader toggle={toggle}>Request employee worktime</ModalHeader>
+                    <div className="descriptionText"> Pick a time for a specific employee activity</div>
                     <ModalBody>
                         <Form>
                             <FormGroup>
