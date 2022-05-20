@@ -109,7 +109,9 @@ render() {
                         ) : null}
 
                         {this.state.delatable === true  ? (
-                        <Button onClick= {(event) => this.deleteItem()}>
+                        <Button
+                            color="danger"
+                            onClick= {(event) => this.deleteItem()}>
                             Delete
                     </Button>
                         ) : null}
