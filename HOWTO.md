@@ -22,7 +22,9 @@ https://www.digitalocean.com/community/tutorial_series/how-to-install-node-js-an
     Pipenv install django
 ####
     Pipenv install djangorestframework django-cors-headers
-
+####
+    pip3 install xlwt 
+    
 ### Backend
 
     cd backend
