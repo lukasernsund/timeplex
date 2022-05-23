@@ -34,7 +34,7 @@ https://www.digitalocean.com/community/tutorial_series/how-to-install-node-js-an
 ####
     Cd Timplex/frontend  
 ####
-    Install npm
+    npm Install
 ####
     Install axios@0.21.1
 ####
