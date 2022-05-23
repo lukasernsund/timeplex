@@ -15,7 +15,9 @@ https://www.digitalocean.com/community/tutorial_series/how-to-install-node-js-an
 ####
     cd timeplex
 ##### Use pip or pip3 depending on your machine
-    pip install pipenv or pip3 install pipenv
+    pip install pipenv  
+####
+    pip3 install pipenv
 ####
     pipenv shell
 ####
@@ -24,6 +26,8 @@ https://www.digitalocean.com/community/tutorial_series/how-to-install-node-js-an
     pipenv install djangorestframework django-cors-headers
 ####
     pip install xlwt 
+####
+    pip3 install xlwt 
     
 ### Backend
 
