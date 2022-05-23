@@ -11,17 +11,17 @@ https://www.digitalocean.com/community/tutorial_series/how-to-install-node-js-an
 
 ## In Terminal
 
-    Git Clone https://github.com/lukasernsund/timeplex.git
+    git Clone https://github.com/lukasernsund/timeplex.git
 ####
-    Cd timeplex
+    cd timeplex
 ##### Use pip or pip3 depending on your machine
-    Pip install pipenv or pip3 install pipenv
+    pip install pipenv or pip3 install pipenv
 ####
-    Pipenv shell
+    pipenv shell
 ####
-    Pipenv install django
+    pipenv install django
 ####
-    Pipenv install djangorestframework django-cors-headers
+    pipenv install djangorestframework django-cors-headers
 ####
     pip install xlwt 
     
@@ -29,16 +29,16 @@ https://www.digitalocean.com/community/tutorial_series/how-to-install-node-js-an
 
     cd backend
 ####
-    Python manage.py runserver
+    python manage.py runserver
 
 ### Frontend
-    Cd --
+    cd --
 ####
-    Cd Timplex/frontend  
+    cd timplex/frontend  
 ####
-    npm Install
+    npm install
 ####
-    Install axios@0.21.1
+    install axios@0.21.1
 ####
     npm start
  
