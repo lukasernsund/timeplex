@@ -38,7 +38,5 @@ https://www.digitalocean.com/community/tutorial_series/how-to-install-node-js-an
 ####
     npm install
 ####
-    install axios@0.21.1
-####
     npm start
  
