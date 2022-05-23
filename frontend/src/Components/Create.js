@@ -3,9 +3,11 @@ import "./Create.css";
 import "../App.css";
 import axios from "axios";
 import BasicDatePicker from "./Date";
+import Box from '@mui/material/Box';
 //import ComboBox from "./Search";
 import { Link } from "react-router-dom";
 import ModalTime from "./ModalTime";
+import ModalDelete from "./ModalDelete.js"   //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 import { Input } from "reactstrap";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextField from "@mui/material/TextField";
@@ -24,6 +26,10 @@ class Create extends React.Component {
     this.state = {
       modal: false,
       deletable: [],
+      showDeleteModal: false,
+      deleteItemModal: false,
+      deleteModalText: ["employee","from the schedule"],
+      tempSaveItem: {},
       workTimeList: [],
       allSchedules: [],
       worktimeEmployee: [],
@@ -86,6 +92,10 @@ class Create extends React.Component {
     this.setState({ modal: !this.state.modal });
   };
 
+  toggleDelete = () => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+    this.setState({ showDeleteModal: !this.state.showDeleteModal });
+  };
+
   handleChange = (e, ID) => {
     let { name, value } = e.target;
     const activeItem = { ...this.state.activeItem, [name]: value };
@@ -97,20 +107,30 @@ class Create extends React.Component {
     }
   };
 
+
   handleDelete = (item) => {
     if(this.state.deletable[item.id]){
       this.state.deletable[item.id]=false
     }
-    
+
     this.state.startTimeRequest[item.id] = "";
     this.state.endTimeRequest[item.id] = "";
     this.state.descriptionRequest[item.id] = "";
 
+    if(this.state.deleteItemModal) {
     this.setState({
       employeeWorking: this.state.employeeWorking.filter(function (test) {
         return test !== item;
       }),
     });
+      this.state.deleteItemModal = false;
+    }
+  };
+
+  popUpDelete = (item) => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    this.setState({ showDeleteModal: !this.state.showDeleteModal });
+    this.state.tempSaveItem = item;
+    console.log(this.state.tempSaveItem)
   };
 
   AddEmployee = (item) => {
@@ -118,8 +138,8 @@ class Create extends React.Component {
       return;
     }
 
-    this.state.start_time_employees[item.id] = "12:00";
-    this.state.end_time_employees[item.id] = "12:00";
+    this.state.start_time_employees[item.id] = "09:00";
+    this.state.end_time_employees[item.id] = "17:00";
     this.setState((prevState) => ({
       employeeWorking: [item, ...prevState.employeeWorking],
     }));
@@ -207,7 +227,7 @@ class Create extends React.Component {
         )
         .then((res) => this.refreshList());
 
-      if (this.state.startTimeRequest[ID] === undefined) { 
+      if (this.state.startTimeRequest[ID] === undefined) {
         this.state.activeItem2.start_time = "";
         this.state.activeItem2.end_time = "";
         this.state.activeItem2.description = "";
@@ -222,7 +242,7 @@ class Create extends React.Component {
       }
 
       else {
-        
+
         const startTimeRequest = this.state.startTimeRequest[ID];
         const endTimeRequest = this.state.endTimeRequest[ID];
         const description = this.state.descriptionRequest[ID];
@@ -250,7 +270,14 @@ class Create extends React.Component {
     }
     const chosen_date = value.toISOString().split("T")[0];
     this.setState({ activeItem: { date_schedule: chosen_date } });
-  }
+
+    try {
+      const chosen_date = value.toISOString().split("T")[0]
+      this.setState({activeItem: {date_schedule: chosen_date}})
+    }
+    catch(error){
+    }
+    }
 
   request = (id) => {
 
@@ -261,7 +288,7 @@ class Create extends React.Component {
       this.state.activeItem2.start_time = this.state.startTimeRequest[id];
       this.state.activeItem2.end_time = this.state.endTimeRequest[id];
       this.state.activeItem2.description = this.state.descriptionRequest[id];
-    } 
+    }
 
     else {
       this.state.activeItem2.start_time = "";
@@ -280,16 +307,22 @@ class Create extends React.Component {
     if (item.start_time !== "" || item.start_time != undefined){
     this.state.deletable[item.employeeID]=true;
     }
-    if (item.start_time == ""){      
+    if (item.start_time == ""){
       this.state.deletable[item.employeeID]=false;
     }
-  
-    
+
+
     this.toggle();
     this.state.startTimeRequest[item.employeeID] = item.start_time;
     this.state.endTimeRequest[item.employeeID] = item.end_time;
     this.state.descriptionRequest[item.employeeID] = item.description;
   };
+
+  handleSubmitDelete = (item) => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    this.toggleDelete();
+    this.state.deleteItemModal = item;
+    this.handleDelete(this.state.tempSaveItem)
+  }
 
   autoComplete = () => {
     const newItems = this.state.workTimeList;
@@ -357,8 +390,6 @@ class Create extends React.Component {
           <span className="mr-5"></span>
 
           <span>
-            
-        
             {this.state.deletable[item.id] ? (
             <button
             className="btn btn-success mr-2"
@@ -366,7 +397,7 @@ class Create extends React.Component {
           >
             Request
           </button>
-        ) : 
+        ) :
         <button
         className="btn btn-warning mr-2"
         onClick={() => this.request(item.id)}
@@ -374,11 +405,11 @@ class Create extends React.Component {
         Request
       </button>}
             <button
-              className="btn btn-danger mr-2"
-              onClick={() => this.handleDelete(item)}
+                className="btn btn-danger mr-2"
+                onClick={() => this.popUpDelete(item)}  //SHOULD ADD INPUT ITEM TO CALL HANDLE DELETE FROM THIS FUNC
             >
-              Delete
-            </button>
+                Delete
+              </button>
           </span>
         </li>
       </div>
@@ -403,12 +434,16 @@ class Create extends React.Component {
                 label="Date"
                 autoComplete="off"
                 ReadOnlyInput="true"
-                ReadOnly="true"
+                minDate={new Date()}
+                disableMaskedInput = "false"
                 value={this.state.activeItem.date_schedule}
                 onChange={(newValue) => {
                   this.setDate(newValue);
                 }}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => <TextField {...params} sx={{
+                  svg: { color: '#3F72AF' },
+                }}/>}
+
               />
             </LocalizationProvider>
             <Link to={"/Schedule/" + this.state.activeItem.date_schedule}>
@@ -431,6 +466,15 @@ class Create extends React.Component {
             toggle={this.toggle}
             onSave={this.handleSubmit}
           />
+        ) : null}
+
+        {this.state.showDeleteModal ? (
+            <ModalDelete
+                toggle={this.toggleDelete}
+                onSave = {this.handleSubmitDelete}
+                tempSaveItem ={this.state.tempSaveItem}
+                deleteModalText ={this.state.deleteModalText}
+            />
         ) : null}
       </div>
     );

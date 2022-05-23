@@ -5,6 +5,7 @@ import './Employee.css';
 import '../App.css'
 
 import axios from 'axios';
+import ModalDelete from "./ModalDelete";
     axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
     axios.defaults.xsrfCookieName = "csrftoken";
 
@@ -15,6 +16,10 @@ class Employee extends React.Component{
         this.state = {
             employeeList: [],
             modal: false,
+            showDeleteModal: false,
+            deleteItemModal: false,
+            tempSaveItem: {},
+            deleteModalText: ["","as an employee"],
             initialItem:{
                 first_name: "",
                 last_name:"",
@@ -56,14 +61,25 @@ class Employee extends React.Component{
   }
     toggle = () => {
     this.setState({ modal: !this.state.modal });
-
   };
+    toggleDelete = () => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+        this.setState({ showDeleteModal: !this.state.showDeleteModal });
+    };
 
     handleDelete = (item) => {
-    axios
-      .delete(`http://localhost:8000/api/employee/${item.id}/`)
-      .then((res) => this.refreshList());
+
+        if(this.state.deleteItemModal) {
+            axios
+                .delete(`http://localhost:8000/api/employee/${item.id}/`)
+                .then((res) => this.refreshList());
+            this.state.deleteItemModal = false;
+        }
   };
+    popUpDelete = (item) => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        this.setState({ showDeleteModal: !this.state.showDeleteModal });
+        this.state.tempSaveItem = item;
+        console.log(item.first_name)
+    };
 
     handleSubmit = (item) => {
         this.toggle();
@@ -78,6 +94,12 @@ class Employee extends React.Component{
       .post("http://localhost:8000/api/employee/", item) //tidigare stod det endast /api/employee/
       .then((res) => this.refreshList());
   };
+
+    handleSubmitDelete = (item) => { //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        this.toggleDelete();
+        this.state.deleteItemModal = item;
+        this.handleDelete(this.state.tempSaveItem)
+    }
 
     openPopup =()=>{
       const initialItem=this.state.initialItem
@@ -126,7 +148,7 @@ class Employee extends React.Component{
           </button>
           <button
             className="btn btn-danger"
-            onClick={() => this.handleDelete(item)}
+            onClick={() => this.popUpDelete(item)}
           >
             Delete
           </button>
@@ -147,6 +169,14 @@ class Employee extends React.Component{
             onSave={this.handleSubmit}
           />
         ) : null}
+            {this.state.showDeleteModal ? (
+                <ModalDelete
+                    toggle={this.toggleDelete}
+                    onSave = {this.handleSubmitDelete}
+                    tempSaveItem = {this.state.tempSaveItem}
+                    deleteModalText = {this.state.deleteModalText}
+                />
+            ) : null}
         {this.renderItems()}
         </div>
         )

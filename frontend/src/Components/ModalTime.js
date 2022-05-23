@@ -46,6 +46,7 @@ render() {
             <Modal isOpen={true} toggle={toggle}>
                 <div className="inputEmployee">
                     <ModalHeader toggle={toggle}>Request employee worktime</ModalHeader>
+                    <div className="descriptionText"> Pick a time for a specific employee activity</div>
                     <ModalBody>
                         <Form>
                             <FormGroup>
@@ -108,7 +109,9 @@ render() {
                         ) : null}
 
                         {this.state.delatable === true  ? (
-                        <Button onClick= {(event) => this.deleteItem()}>
+                        <Button
+                            color="danger"
+                            onClick= {(event) => this.deleteItem()}>
                             Delete
                     </Button>
                         ) : null}
