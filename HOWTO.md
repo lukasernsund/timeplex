@@ -14,7 +14,7 @@ https://www.digitalocean.com/community/tutorial_series/how-to-install-node-js-an
     Git Clone https://github.com/lukasernsund/timeplex.git
 ####
     Cd timeplex
-####
+##### Use pip or pip3 depending on your machine
     Pip install pipenv or pip3 install pipenv
 ####
     Pipenv shell
@@ -23,7 +23,7 @@ https://www.digitalocean.com/community/tutorial_series/how-to-install-node-js-an
 ####
     Pipenv install djangorestframework django-cors-headers
 ####
-    pip3 install xlwt 
+    pip install xlwt 
     
 ### Backend
 
